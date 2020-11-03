@@ -1,5 +1,5 @@
 # Backend
-####[정인] DB 세팅<br>
+#### [정인] DB 세팅<br>
 users-cycles,dates,pills가 다 1:M관계이고 userId로 연결<br>
 1. `.env`파일 `DB_SECRET`에 로컬 mysql 비밀번호 넣어준 후
 2. 터미널에 `sequelize db:create` 명령어 실행
