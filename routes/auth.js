@@ -6,7 +6,7 @@ const { User } = require('../models');
 const router = express.Router();
 
 //회원가입
-router.post('/register', isNotLoggedIn, async (req, res) => {
+router.post('/api/auth/register', isNotLoggedIn, async (req, res) => {
     const {
         userName,
         userEmail,
@@ -39,7 +39,7 @@ router.post('/register', isNotLoggedIn, async (req, res) => {
 });
 
 //로그인
-router.post('/login', isNotLoggedIn, async (req, res, next) => {
+router.post('/api/auth/login', isNotLoggedIn, async (req, res, next) => {
     passport.authenticate('local', (authError, user, info) => {
         if (authError) {
             console.log(authError);
@@ -59,7 +59,7 @@ router.post('/login', isNotLoggedIn, async (req, res, next) => {
 });
 
 //로그아웃
-router.get('/logout', isLoggedIn, async (req, res) => {
+router.get('/api/auth/logout', isLoggedIn, async (req, res) => {
     req.logout();
     req.session.destroy();
     return res.status(201).send('로그아웃 되었습니다');
