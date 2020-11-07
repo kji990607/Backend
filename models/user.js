@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER(3),
       },
       meanPeriod: {
-        type: DataTyoes.INTEGER(3),
+        type: DataTypes.INTEGER(3),
       },
     },
     {
