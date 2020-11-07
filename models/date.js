@@ -17,10 +17,6 @@ module.exports = (sequelize, DataTypes) => {
       dateCondition: {
         type: DataTypes.INTEGER(10),
       },
-      userPassword: {
-        type: DataTypes.STRING(100),
-        allowNull: false,
-      },
       isEgg: {
         type: DataTypes.BOOLEAN,
       },
