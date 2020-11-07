@@ -24,6 +24,9 @@ module.exports = (sequelize, DataTypes) => {
       userHeight: {
         type: DataTypes.INTEGER(3),
       },
+      meanPeriod: {
+        type: DataTyoes.INTEGER(3),
+      },
     },
     {
       charset: "utf8",
