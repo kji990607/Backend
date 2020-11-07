@@ -31,14 +31,14 @@ router.post('/api/auth/register', isNotLoggedIn, async (req, res) => {
             userWeight: userWeight,
             userHeight: userHeight,
         });
-        return res.status(201).send('회원가입이 완료되었습니다');
+        return res.status(201).json({completed:true});
     } catch (error) {
         console.error(error);
         return next(error);
     }
 });
 
-//로그인
+//로그인 성공 시 json 형식으로 사용자 이름 send
 router.post('/api/auth/login', isNotLoggedIn, async (req, res, next) => {
     passport.authenticate('local', (authError, user, info) => {
         if (authError) {
@@ -53,7 +53,8 @@ router.post('/api/auth/login', isNotLoggedIn, async (req, res, next) => {
                 console.error(loginError);
                 return next(loginError);
             }
-            return res.send(`${user.userName}님이 로그인하셨습니다`);
+            const email = JSON.parse(JSON.stringify(user.userEmail));
+            return res.send(email);
         });
     })(req, res, next);
 });
@@ -62,6 +63,7 @@ router.post('/api/auth/login', isNotLoggedIn, async (req, res, next) => {
 router.get('/api/auth/logout', isLoggedIn, async (req, res) => {
     req.logout();
     req.session.destroy();
+    console.log("로그아웃");
     return res.status(201).send('로그아웃 되었습니다');
 });
 

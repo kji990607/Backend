@@ -1,6 +1,6 @@
 # Backend
 #### DB 세팅<br>
-users-cycles,dates,pills가 다 1:N 관계이고 userId로 연결<br>
+users-cycles, dates, pills가 다 1:N 관계이고 userId로 연결<br>
 1 `.env`파일 생성 후 아래 내용 그대로 저장
 ```
 DB_SECRET=[로컬 mysql 비밀번호] 
