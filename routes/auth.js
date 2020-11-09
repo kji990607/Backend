@@ -41,11 +41,13 @@ router.post("/api/auth/register", isNotLoggedIn, async (req, res) => {
         userEmail: userEmail,
       },
     });
-    await Cycle.create({
-      cycleStart: firCycleStart,
-      cycleEnd: firCycleEnd,
-      userId: linkUser.id,
-    });
+    if (firCycleStart) {
+      await Cycle.create({
+        cycleStart: firCycleStart,
+        cycleEnd: firCycleEnd,
+        userId: linkUser.id,
+      });
+    }
     return res.status(201).json({ completed: true });
   } catch (error) {
     console.error(error);
