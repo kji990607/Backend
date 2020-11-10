@@ -24,8 +24,14 @@ module.exports = (sequelize, DataTypes) => {
       userHeight: {
         type: DataTypes.INTEGER(3),
       },
+      meanCycle: {
+        type: DataTypes.INTEGER(2),
+      },
       meanPeriod: {
-        type: DataTypes.INTEGER(3),
+        type: DataTypes.INTEGER(2),
+      },
+      userAlcohol: {
+        type: DataTypes.BOOLEAN,
       },
     },
     {
@@ -44,6 +50,10 @@ module.exports = (sequelize, DataTypes) => {
 
   User.associate = function (models) {
     User.hasMany(models.Pill);
+  };
+
+  User.associate = function (models) {
+    User.belongsTo(models.Pill);
   };
 
   return User;

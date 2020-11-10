@@ -2,10 +2,16 @@ module.exports = (sequelize, DataTypes) => {
   const Cycle = sequelize.define(
     "cycle",
     {
-      cycleStart: {
+      bleedStart: {
         type: DataTypes.DATEONLY,
       },
-      cycleEnd: {
+      bleedEnd: {
+        type: DataTypes.DATEONLY,
+      },
+      eggStart: {
+        type: DataTypes.DATEONLY,
+      },
+      eggEnd: {
         type: DataTypes.DATEONLY,
       },
     },

@@ -2,11 +2,17 @@ module.exports = (sequelize, DataTypes) => {
   const Pill = sequelize.define(
     "pill",
     {
-      pillStart: {
-        type: DataTypes.DATEONLY,
+      pillName: {
+        type: DataTypes.STRING(10),
       },
-      pillEnd: {
-        type: DataTypes.DATEONLY,
+      isAlcohol: {
+        type: DataTypes.BOOLEAN,
+      },
+      pillEffect1: {
+        type: DataTypes.INTEGER(2),
+      },
+      pillEffect2: {
+        type: DataTypes.INTEGER(2),
       },
     },
     {
@@ -16,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   Pill.associate = function (models) {
-    Pill.belongsTo(models.User);
+    Pill.hasMany(models.User);
   };
 
   return Pill;

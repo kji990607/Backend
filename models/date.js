@@ -5,17 +5,17 @@ module.exports = (sequelize, DataTypes) => {
       date: {
         type: DataTypes.DATEONLY,
       },
-      isPill: {
-        type: DataTypes.BOOLEAN,
-      },
       isSex: {
         type: DataTypes.BOOLEAN,
       },
+      isControl: {
+        type: DataTypes.BOOLEAN,
+      },
       dateMood: {
-        type: DataTypes.INTEGER(10),
+        type: DataTypes.INTEGER(2),
       },
       dateCondition: {
-        type: DataTypes.INTEGER(10),
+        type: DataTypes.INTEGER(2),
       },
       isEgg: {
         type: DataTypes.BOOLEAN,
