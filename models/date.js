@@ -8,6 +8,9 @@ module.exports = (sequelize, DataTypes) => {
       isSex: {
         type: DataTypes.BOOLEAN,
       },
+      isProtection: {
+        type: DataTypes.BOOLEAN,
+      },
       isControl: {
         type: DataTypes.BOOLEAN,
       },
