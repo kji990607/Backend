@@ -4,10 +4,22 @@ module.exports = (sequelize, DataTypes) => {
     {
       controlStart: {
         type: DataTypes.DATEONLY,
+        allowNull: false,
       },
       controlEnd: {
         type: DataTypes.DATEONLY,
       },
+      controlHour: {
+        type: DataTypes.INTEGER(2),
+        allowNull: false,
+      },
+      controlMinute: {
+        type: DataTypes.INTEGER(2),
+        allowNull: false,
+      },
+    },
+    {
+      timestamps: false,
     },
     {
       charset: "utf8",

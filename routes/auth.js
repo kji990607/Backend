@@ -74,8 +74,7 @@ router.post("/api/auth/login", isNotLoggedIn, async (req, res, next) => {
         console.error(loginError);
         return next(loginError);
       }
-      const email = JSON.parse(JSON.stringify(user.userEmail));
-      return res.send(email);
+      return res.send(user.id.toString());
     });
   })(req, res, next);
 });

@@ -14,7 +14,13 @@ module.exports = (sequelize, DataTypes) => {
       dateMood: {
         type: DataTypes.INTEGER(2),
       },
-      dateCondition: {
+      dateCondition1: {
+        type: DataTypes.INTEGER(2),
+      },
+      dateCondition2: {
+        type: DataTypes.INTEGER(2),
+      },
+      dateCondition3: {
         type: DataTypes.INTEGER(2),
       },
       isEgg: {
@@ -23,6 +29,12 @@ module.exports = (sequelize, DataTypes) => {
       isBleed: {
         type: DataTypes.BOOLEAN,
       },
+      dateMemo: {
+        type: DataTypes.TEXT,
+      },
+    },
+    {
+      timestamps: false,
     },
     {
       charset: "utf8",
