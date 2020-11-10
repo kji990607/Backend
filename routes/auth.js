@@ -16,7 +16,9 @@ router.post("/api/auth/register", isNotLoggedIn, async (req, res) => {
     userHeight,
     firCycleStart,
     firCycleEnd,
+    meanCycle,
     meanPeriod,
+    userAlcohol,
   } = req.body;
   try {
     //exUser 존재 시
@@ -33,7 +35,9 @@ router.post("/api/auth/register", isNotLoggedIn, async (req, res) => {
       userBirth: userBirth,
       userWeight: userWeight,
       userHeight: userHeight,
+      meanCycle: meanCycle,
       meanPeriod: meanPeriod,
+      userAlcohol: userAlcohol,
     });
     const linkUser = await User.findOne({
       attributes: ["id"],
