@@ -4,6 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       date: {
         type: DataTypes.DATEONLY,
+        allowNull: false,
       },
       isSex: {
         type: DataTypes.BOOLEAN,
