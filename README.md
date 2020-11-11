@@ -10,7 +10,7 @@ COOKIE_SECRET=passengers
 
 2 터미널에 `sequelize db:create` 명령어로 DB 생성
 
-### ★ 11/10 기준 DB 구조
+### ★ 11/11 기준 DB 구조
 ![DB](./DB.png)
 
 ### ★ time

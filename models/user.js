@@ -52,7 +52,11 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   User.associate = function (models) {
-    User.hasMany(models.Pill);
+    User.hasMany(models.Control);
+  };
+
+  User.associate = function (models) {
+    User.hasMany(models.Predict);
   };
 
   User.associate = function (models) {
