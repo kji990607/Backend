@@ -11,7 +11,8 @@ COOKIE_SECRET=passengers
 2 터미널에 `sequelize db:create` 명령어로 DB 생성
 
 ### ★ 11/11 기준 DB 구조
-![DB](./DB.png)
+<img width="501" alt="DB" src="https://user-images.githubusercontent.com/62373386/98750231-c1812b80-2400-11eb-8f6a-604114582d0d.PNG">
+
 
 ### ★ time
 DB 테이블에 생성, 수정시간 삭제. 필요하면 말해줘<br>
