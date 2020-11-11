@@ -1,6 +1,6 @@
 const express = require("express");
 const { isLoggedIn } = require("./middlewares");
-const { User, Date, Cycle } = require("../models");
+const { Date, Cycle } = require("../models");
 const router = express.Router();
 
 //캘린더 디테일 페이지 post
@@ -66,6 +66,26 @@ router.post("/api/main/date", isLoggedIn, async (req, res) => {
       bleedEnd: cycleEnd,
     });
     return res.status(201).json({ completed: true });
+  } catch (error) {
+    console.error(error);
+    return next(error);
+  }
+});
+
+//캘린더 디테일 페이지 get
+//입력된 정보가 있으면 보내주고, 없으면 "입력된 정보가 없습니다."
+router.get("/api/main/date", isLoggedIn, async (req, res) => {
+  //날짜를 어떻게 받아올건지? 주소로?? 아님 req.body로?
+  const date = req.body.date;
+  try {
+    const exDate = await Date.findOne({
+      where: { date: date, userId: req.user.id },
+    });
+    if (exDate) {
+      res.send(exDate);
+    } else {
+      res.send("입력된 정보가 없습니다.");
+    }
   } catch (error) {
     console.error(error);
     return next(error);
