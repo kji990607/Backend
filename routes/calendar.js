@@ -1,7 +1,8 @@
 const express = require("express");
 const { isLoggedIn } = require("./middlewares");
-const { Date, Cycle } = require("../models");
+const { User, Date, Cycle } = require("../models");
 const router = express.Router();
+const moment = require("moment");
 
 //캘린더 디테일 페이지 post
 //로그인한 사용자의 id는 req.user.id로 가져올 수 있다
@@ -20,7 +21,7 @@ router.post("/api/main/date", isLoggedIn, async (req, res) => {
   } = req.body;
   try {
     //사용자가 입력한 정보를 dates 테이블에 입력
-    //upsert 기준이 (date+userId)여야하는데 현재 sequelize는 FK를 composite key로 사용 불가... if문 쓰는 수 밖에
+    //upsert 기준이 (date+userId)여야하는데 sequelize는 FK를 composite key로 사용 불가... if문 쓰는 수 밖에?
     const exDate = await Date.findOne({
       where: { date: date, userId: req.user.id },
     });
@@ -60,11 +61,37 @@ router.post("/api/main/date", isLoggedIn, async (req, res) => {
         userId: req.user.id,
       });
     }
-    //사용자가 입력한 정보를 cycles 테이블에 입력
-    await Cycle.create({
-      bleedStart: cycleStart,
-      bleedEnd: cycleEnd,
+    const exCycle = Cycle.findOne({
+      where: { userId: req.user.id, bleedEnd: null },
     });
+    //사용자가 입력한 정보를 cycles 테이블에 입력
+    //사용자가 cycleStart를 설정: cycles 테이블 bleedStart 저장
+    if (cycleStart) {
+      await Cycle.create({
+        bleedStart: cycleStart,
+        userId: req.user.id,
+      });
+    } else if (exCycle) {
+      //cycles 테이블에 cycleEnd가 없는 row가 존재 && 사용자가 cycleEnd를 설정: cycles 테이블에 bleedEnd 저장
+      await Cycle.update(
+        {
+          bleedEnd: cycleEnd,
+        },
+        {
+          where: { userId: req.user.id, bleedEnd: null },
+        }
+      );
+    } else if (cycleEnd) {
+      const userInfo = User.findOne({
+        attributes: ["meanPeriod"],
+        where: { id: req.user.id },
+      });
+      //cycleStart를 설정 전 cycleEnd 설정했을 때: cycles 테이블에 bleedEnd 저장. bleedStart = cycleEnd - meanPeriod로 자동저장
+      await Cycle.create({
+        //미완성!! moment 모듈??
+        //meanPeriod를 입력 안 한 사용자일때?
+      });
+    }
     return res.status(201).json({ completed: true });
   } catch (error) {
     console.error(error);
