@@ -17,7 +17,7 @@ router.post("/api/main/date", isLoggedIn, async (req, res) => {
     isProtection,
     isControl,
     dateMood,
-    //★ 프런트 처리 미완
+    //★ 프런트 처리 미완 ★
     dateCondition,
     dateMemo,
   } = req.body;
@@ -37,7 +37,7 @@ router.post("/api/main/date", isLoggedIn, async (req, res) => {
           isControl: isControl,
           dateMood: dateMood,
           dateCondition1: dateCondition,
-          //★ 프런트 처리 미완
+          //★ 프런트 처리 미완 ★
           dateCondition2: 0,
           dateCondition3: 0,
           dateMemo: dateMemo,
@@ -56,7 +56,7 @@ router.post("/api/main/date", isLoggedIn, async (req, res) => {
         isControl: isControl,
         dateMood: dateMood,
         dateCondition1: dateCondition,
-        //★ 프런트 처리 미완
+        //★ 프런트 처리 미완 ★
         dateCondition2: 0,
         dateCondition3: 0,
         dateMemo: dateMemo,
@@ -109,8 +109,12 @@ router.post("/api/main/date", isLoggedIn, async (req, res) => {
           where: { id: req.user.id },
         });
         await Cycle.create({
-          //미완성!! moment 모듈??
-          //meanPeriod를 입력 안 한 사용자일때?
+          //★ meanPeriod를 입력 안 한 사용자일때? ★
+          bleedStart: moment(cycleEnd, "YYYY-MM-DD")
+            .subtract(userInfo.meanPeriod, "d")
+            .format("YYYY-MM-DD"),
+          bleedEnd: cycleEnd,
+          userId: req.user.id,
         });
         return res.status(200).json({ completed: true });
       } else {
