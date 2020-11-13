@@ -8,6 +8,7 @@ const session = require("express-session");
 const passport = require("passport");
 
 const authRouter = require("./routes/auth");
+const healthPillRouter = require("./routes/healthPill");
 const { sequelize } = require("./models");
 const passportConfig = require("./passport");
 
@@ -43,6 +44,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 app.use("/", authRouter);
+app.use("/", healthPillRouter);
 
 app.listen(4000, () => {
   console.log("http://localhost:4000/ 에서 실행중");
