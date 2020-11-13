@@ -86,7 +86,7 @@ router.get("/api/auth/logout", isLoggedIn, async (req, res) => {
   req.logout();
   req.session.destroy();
   console.log("로그아웃");
-  return res.status(201).send("로그아웃 되었습니다");
+  return res.status(200).send("로그아웃 되었습니다");
 });
 
 module.exports = router;

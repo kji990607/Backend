@@ -3,8 +3,10 @@ const { isLoggedIn } = require("./middlewares");
 const { User, Date, Cycle } = require("../models");
 const router = express.Router();
 const moment = require("moment");
+const Sequelize = require("sequelize");
+const Op = Sequelize.Op;
 
-//캘린더 디테일 페이지 post
+//캘린더 디테일 페이지 POST
 //로그인한 사용자의 id는 req.user.id로 가져올 수 있다
 router.post("/api/main/date", isLoggedIn, async (req, res) => {
   const {
@@ -61,45 +63,67 @@ router.post("/api/main/date", isLoggedIn, async (req, res) => {
         userId: req.user.id,
       });
     }
-    const exCycle = Cycle.findOne({
-      where: { userId: req.user.id, bleedEnd: null },
-    });
     //사용자가 입력한 정보를 cycles 테이블에 입력
-    //사용자가 cycleStart를 설정: cycles 테이블 bleedStart 저장
-    if (cycleStart) {
-      await Cycle.create({
-        bleedStart: cycleStart,
+    //cycleStart cycleEnd 동시에 존재하는 경우는 없게 프런트에서 처리 완료
+    const exCycle = await Cycle.findOne({
+      where: {
+        bleedStart: { [Op.ne]: null },
+        bleedEnd: null,
         userId: req.user.id,
-      });
-    } else if (exCycle) {
-      //cycles 테이블에 cycleEnd가 없는 row가 존재 && 사용자가 cycleEnd를 설정: cycles 테이블에 bleedEnd 저장
-      await Cycle.update(
-        {
-          bleedEnd: cycleEnd,
-        },
-        {
-          where: { userId: req.user.id, bleedEnd: null },
-        }
-      );
-    } else if (cycleEnd) {
-      const userInfo = User.findOne({
-        attributes: ["meanPeriod"],
-        where: { id: req.user.id },
-      });
-      //cycleStart를 설정 전 cycleEnd 설정했을 때: cycles 테이블에 bleedEnd 저장. bleedStart = cycleEnd - meanPeriod로 자동저장
-      await Cycle.create({
-        //미완성!! moment 모듈??
-        //meanPeriod를 입력 안 한 사용자일때?
-      });
+      },
+    });
+    //bleedStart만 있고 bleedEnd는 없는 이전 기록이 존재하는 경우
+    if (exCycle) {
+      if (cycleStart) {
+        //잘못된 입력. 이전 기록의 cycleEnd를 미리 설정해야 함.
+        res.send("최근 생리 종료일을 먼저 입력해야 합니다.");
+      } else if (cycleEnd) {
+        //사용자가 cycleEnd를 설정: cycles 테이블 bleedEnd 업데이트
+        await Cycle.update(
+          {
+            bleedEnd: cycleEnd,
+          },
+          {
+            where: {
+              bleedStart: { [Op.ne]: null },
+              bleedEnd: null,
+              userId: req.user.id,
+            },
+          }
+        );
+        return res.status(200).json({ completed: true });
+      }
+    } else {
+      //이전 기록이 존재하지 않는 경우
+      if (cycleStart) {
+        //사용자가 cycleStart를 설정: cycles 테이블 bleedStart 저장
+        await Cycle.create({
+          bleedStart: cycleStart,
+          userId: req.user.id,
+        });
+        return res.status(200).json({ completed: true });
+      } else if (cycleEnd) {
+        //사용자가 cycleEnd를 설정: cycles 테이블 bleedEnd 저장, bleedStart = bleedEnd - cycles.meanPeriod로 계산 후 저장
+        const userInfo = await User.findOne({
+          attributes: ["meanPeriod"],
+          where: { id: req.user.id },
+        });
+        await Cycle.create({
+          //미완성!! moment 모듈??
+          //meanPeriod를 입력 안 한 사용자일때?
+        });
+        return res.status(200).json({ completed: true });
+      } else {
+        return res.status(200).json({ completed: true });
+      }
     }
-    return res.status(201).json({ completed: true });
   } catch (error) {
     console.error(error);
     return next(error);
   }
 });
 
-//캘린더 디테일 페이지 get
+//캘린더 디테일 페이지 GET
 //입력된 정보가 있으면 보내주고, 없으면 "입력된 정보가 없습니다."
 router.get("/api/main/date", isLoggedIn, async (req, res) => {
   //날짜를 어떻게 받아올건지? 주소로?? 아님 req.body로?
