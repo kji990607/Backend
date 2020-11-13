@@ -1,12 +1,14 @@
 const schedule = require("node-schedule");
 const express = require("express");
-// 미들웨어가 꼭 필요한가? - 설정해둔 약이 있는지 확인?
+const { isLoggedIn } = require("./middlewares");
 const { Control, Date } = require("../models");
 const router = express.Router();
 const moment = require("moment");
 const rule = new schedule.RecurrenceRule();
+const j = schedule.scheduleJob(rule, function () {
+});
 
-router.post("/api/main/health", async (req, res) => {
+router.post("http://localhost:3000/api/main/control", isLoggedIn, async (req, res) => {
     const {
         controlStart,
         controlEnd,
@@ -26,7 +28,27 @@ router.post("/api/main/health", async (req, res) => {
         return next(error);
     }
 });
-router.get("/api/main/health", async (req, res) => {
+
+router.post("http://localhost:3000/api/main/date", isLoggedIn, async (req, res) => {
+    const {
+        iscontrol
+    } = req.body;
+});
+router.get("http://localhost:3000/api/main/control", isLoggedIn, async (req, res) => {
+    const control = req.body.control;
+    try {
+        const exDate = await Date.findAll({
+
+        });
+        if (iscontrol = true) {
+            res.send('오늘 피임약 복용 완료');
+        } else {
+            res.send('오늘 피임약 복용 전');
+        }
+    } catch (error) {
+        console.error(error);
+        return next(error);
+    }
 
 });
 
