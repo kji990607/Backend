@@ -2,7 +2,7 @@ const schedule = require("node-schedule");
 const express = require("express");
 const { isLoggedIn } = require("./middlewares");
 const { Control, Date } = require("../models");
-const cron = require("node-cron");
+//const cron = require("node-cron");
 const router = express.Router();
 const moment = require("moment");
 const rule = new schedule.RecurrenceRule();
@@ -64,28 +64,23 @@ for(i=controlStart; i<= controlEnd; i++){
 
  */
 
-
-
 router.get("/api/main/control", isLoggedIn, async (req, res) => {
-  const control = req.body.control;
+  //날짜를 어떻게 받아올건지? 주소로?? 아님 req.body로?
+  const date = req.body.date;
   try {
-    Date.findOne({
-      attributes:[isControl],
-      where : {date:date, userId: req.user.id}, // DB의 Date테이블에서 iscontrol 값 받아와서 True인지 False인지 확인
+    const exDate = await Date.findOne({
+      attributes: ["isControl"],
+      where: { date: date, userId: req.user.id },
     });
-    if (isControl) {
-      res.send("오늘 약 복용 완료");
+    if (exDate.isControl) {
+      res.send("오늘 피임약 복용 완료");
     } else {
-      res.send("오늘 약 복용 전");
+      res.send("오늘 피임약 복용 전");
     }
   } catch (error) {
     console.error(error);
     return next(error);
   }
 });
-
-// router.get("/api/main/control", async (req, res) => {
-//
-// });
 
 module.exports = router;
