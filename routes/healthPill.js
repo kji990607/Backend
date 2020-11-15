@@ -2,7 +2,7 @@ const schedule = require("node-schedule");
 const express = require("express");
 const { isLoggedIn } = require("./middlewares");
 const { Control, Date } = require("../models");
-//const cron = require("node-cron");
+const cron = require("node-cron");
 const router = express.Router();
 const moment = require("moment");
 const rule = new schedule.RecurrenceRule();
@@ -66,6 +66,7 @@ for(i=controlStart; i<= controlEnd; i++){
 
 router.get("/api/main/control", isLoggedIn, async (req, res) => {
   //날짜를 어떻게 받아올건지? 주소로?? 아님 req.body로?
+  //null일 경우에 현재는 에러. 이 상황 어떻게 할지는 추후 논의
   const date = req.body.date;
   try {
     const exDate = await Date.findOne({
