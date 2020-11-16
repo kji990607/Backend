@@ -11,8 +11,8 @@ const j = schedule.scheduleJob(rule, function () {});
 require('moment-timezone');
 moment.tz.setDefault("Asia/Seoul");
 
-router.post("/api/main/control", async (req, res) => {
-  const {controlStart, controlEnd, controlHour, controlMinute} = req.body;
+router.post("/api/main/control", isLoggedIn, async (req, res) => {
+  const {controlStart, controlEnd, controlHour} = req.body;
   try {
     //const Control = await Control.findAll({});
     await Control.create({
@@ -21,17 +21,34 @@ router.post("/api/main/control", async (req, res) => {
       controlEnd: controlEnd,
       controlHour: controlHour,
       userId: req.user.id,
+    },{
+      where: {userId: req.user.id},
     });
 
     const controlTime = controlHour.split(':');
-    rule.hour = controlTime[0];
-    rule.minute = controlTime[1];
-    const j = schedule.scheduleJob(rule, function () {
-      alert('성공!') // alert 말고
-    });
+
+    if(controlEnd === null) {
+      await Control.update({
+        controlEnd: controlStart+180 // controlEnd 안정하면 180일 뒤로 자동지정
+      });
+    } else {
+      await Control.update({
+        controlEnd: controlEnd
+      });
+    }
+
+    for(let i=controlStart; i<= controlEnd; i++) {
+      const alarm = cron.schedule('0   controlTime[1] controlTime[0] * * *', () => {
+        console.log('알람 울리기');
+        alert('성공');
+        if (i > controlEnd) {
+          alarm.destroy();
+        }
+      });
+    }
     return res.status(201).json({completed: true});
     return res.send("라우터 연결 됨");
-  } catch (error) {
+  }catch (error) {
     console.error(error);
     return next(error);
   }
@@ -39,7 +56,11 @@ router.post("/api/main/control", async (req, res) => {
 
 /*
 
-
+rule.hour = controlTime[0];
+    rule.minute = controlTime[1];
+    const j = schedule.scheduleJob(rule, function () {
+      alert('성공!') // alert 말고
+    });
 
 If (controlEnd === null){
     set controlEnd = controlStart+180
