@@ -76,7 +76,7 @@ router.post("/api/auth/login", isNotLoggedIn, async (req, res, next) => {
         console.error(loginError);
         return next(loginError);
       }
-      return res.send(user.id.toString());
+      return res.json({id: user.id, name: user.userName});
     });
   })(req, res, next);
 });
