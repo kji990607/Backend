@@ -14,32 +14,26 @@ moment.tz.setDefault("Asia/Seoul");
 router.post("/api/main/control", isLoggedIn, async (req, res) => {
   let {controlStart, controlEnd, controlHour} = req.body;
   try {
-    //const Control = await Control.findAll({});
-    await Control.create({
-
-      controlStart: controlStart,
-      controlEnd: controlEnd,
-      controlHour: controlHour,
-      userId: req.user.id,
-    },{
-      where: {userId: req.user.id},
-    });
-
-    const controlTime = controlHour.split(':');
-
     if(controlEnd === null) {
-      await Control.update({
+      await Control.create({
+        controlStart: controlStart,
         controlEnd: controlStart+180, // controlEnd 안정하면 180일 뒤로 자동지정
+        controlHour: controlHour,
+        userId: req.user.id,
       },{
         where: {userId: req.user.id},
       });
     } else {
-      await Control.update({
-        controlEnd: controlEnd
+      await Control.create({
+        controlStart: controlStart,
+        controlEnd: controlEnd,
+        controlHour: controlHour,
+        userId: req.user.id,
       },{
         where: {userId: req.user.id},
       });
     }
+    const controlTime = controlHour.split(':');
 
     for(let i=controlStart; i<= controlEnd; i++) {
       const alarm = cron.schedule('0   controlTime[1] controlTime[0] * * *', () => {
