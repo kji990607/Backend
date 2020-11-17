@@ -1,4 +1,4 @@
-const { Control, Date } = require("../models");
+const { Control, Date} = require("../models");
 const schedule = require("node-schedule");
 const express = require("express");
 const { isLoggedIn } = require("./middlewares");
@@ -12,7 +12,7 @@ require('moment-timezone');
 moment.tz.setDefault("Asia/Seoul");
 
 router.post("/api/main/control", isLoggedIn, async (req, res) => {
-  const {controlStart, controlEnd, controlHour} = req.body;
+  let {controlStart, controlEnd, controlHour} = req.body;
   try {
     //const Control = await Control.findAll({});
     await Control.create({
@@ -29,11 +29,15 @@ router.post("/api/main/control", isLoggedIn, async (req, res) => {
 
     if(controlEnd === null) {
       await Control.update({
-        controlEnd: controlStart+180 // controlEnd 안정하면 180일 뒤로 자동지정
+        controlEnd: controlStart+180, // controlEnd 안정하면 180일 뒤로 자동지정
+      },{
+        where: {userId: req.user.id},
       });
     } else {
       await Control.update({
         controlEnd: controlEnd
+      },{
+        where: {userId: req.user.id},
       });
     }
 
@@ -50,32 +54,16 @@ router.post("/api/main/control", isLoggedIn, async (req, res) => {
     return res.send("라우터 연결 됨");
   }catch (error) {
     console.error(error);
-    return next(error);
+    return error;
   }
 });
 
 /*
-
 rule.hour = controlTime[0];
     rule.minute = controlTime[1];
     const j = schedule.scheduleJob(rule, function () {
       alert('성공!') // alert 말고
     });
-
-If (controlEnd === null){
-    set controlEnd = controlStart+180
-    }else {
-        controlEnd: controlEnd}
-const i = new Date();
-for(i=controlStart; i<= controlEnd; i++){
-    const alarm = cron.schedule('0 controlTime[1] controlTime[0] *%/24 * *', () => {
-    console.log('알람 울리기');
-    alert('성공');
-    If (i>controlEnd){
-      alarm.destroy(); }
-});
-
-
  */
 
 
