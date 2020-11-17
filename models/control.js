@@ -10,7 +10,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DATEONLY,
       },
       controlHour: {
-        type: DataTypes.STRING(100),
+        type: DataTypes.INTEGER(2),
+        allowNull: false,
+      },
+      controlMinute: {
+        type: DataTypes.INTEGER(2),
         allowNull: false,
       },
     },
