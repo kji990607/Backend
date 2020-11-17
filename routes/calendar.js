@@ -129,9 +129,9 @@ router.post("/api/main/date", isLoggedIn, async (req, res) => {
 
 //캘린더 디테일 페이지 GET
 //입력된 정보가 있으면 보내주고, 없으면 "입력된 정보가 없습니다."
-router.get("/api/main/date", isLoggedIn, async (req, res) => {
-  //날짜를 어떻게 받아올건지? 주소로?? 아님 req.body로?
-  const date = req.body.date;
+router.get("/api/main/:name/:date", isLoggedIn, async (req, res) => {
+  //날짜는 req.body로 받아옴
+  const date = req.params.date;
   try {
     const exDate = await Date.findOne({
       where: { date: date, userId: req.user.id },
