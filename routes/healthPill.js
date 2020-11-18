@@ -2,10 +2,10 @@ const { Control, Date } = require("../models");
 const schedule = require("node-schedule");
 const express = require("express");
 const { isLoggedIn } = require("./middlewares");
-const cron = require("node-cron");
+// const cron = require("node-cron");
 const router = express.Router();
 const moment = require("moment");
-const rule = new schedule.RecurrenceRule();
+// const rule = new schedule.RecurrenceRule();
 //const j = schedule.scheduleJob(rule, function () {});
 
 require("moment-timezone");
@@ -57,11 +57,12 @@ router.post("/api/main/control", isLoggedIn, async (req, res) => {
       order: [["createdAt", "DESC"]],
     });
     console.log("findAll까지");
-    console.log(exControl.controlStart, exControl.controlEnd);
+    console.log(exControl.controlEnd);
+
     for (let i = exControl.controlStart; i <= exControl.controlEnd; i++) {
       var alarm = schedule.schedulejob(
-        "0 controlMinute controlHour * * *",
-        () => {
+        '0 exControl.controlMinute exControl.controlHour * * *',
+        function (){
           //cron? schedule?
           console.log("알람 울리기");
           alert("성공"); //res.redirect로 알람 페이지로 연결
