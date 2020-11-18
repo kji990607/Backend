@@ -26,8 +26,9 @@ router.post("/api/auth/register", isNotLoggedIn, async (req, res) => {
     if (exUser) {
       return res.send("이미 가입된 이메일입니다");
     }
-    //비밀번호는 암호화
+    //비밀번호 암호화
     const hash = await bcrypt.hash(userPassword, 12);
+    //users 테이블에 사용자 정보 저장
     await User.create({
       userName: userName,
       userEmail: userEmail,
@@ -39,17 +40,18 @@ router.post("/api/auth/register", isNotLoggedIn, async (req, res) => {
       meanPeriod: meanPeriod,
       userAlcohol: userAlcohol,
     });
-    const linkUser = await User.findOne({
+    const loginUser = await User.findOne({
       attributes: ["id"],
       where: {
         userEmail: userEmail,
       },
     });
+    //시작일 정보를 입력했을 때만 주기정보 저장
     if (firCycleStart) {
       await Cycle.create({
-        cycleStart: firCycleStart,
-        cycleEnd: firCycleEnd,
-        userId: linkUser.id,
+        bleedStart: firCycleStart,
+        bleedEnd: firCycleEnd,
+        userId: loginUser.id,
       });
     }
     return res.status(201).json({ completed: true });
@@ -74,7 +76,7 @@ router.post("/api/auth/login", isNotLoggedIn, async (req, res, next) => {
         console.error(loginError);
         return next(loginError);
       }
-      return res.send(user.id.toString());
+      return res.json({id: user.id, name: user.userName});
     });
   })(req, res, next);
 });
@@ -84,7 +86,7 @@ router.get("/api/auth/logout", isLoggedIn, async (req, res) => {
   req.logout();
   req.session.destroy();
   console.log("로그아웃");
-  return res.status(201).send("로그아웃 되었습니다");
+  return res.status(200).send("로그아웃 되었습니다");
 });
 
 module.exports = router;
