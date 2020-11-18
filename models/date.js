@@ -14,6 +14,8 @@ module.exports = (sequelize, DataTypes) => {
       },
       isControl: {
         type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: 0,
       },
       dateMood: {
         type: DataTypes.INTEGER(2),
