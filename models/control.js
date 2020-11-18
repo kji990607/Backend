@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     {
-      timestamps: false,
+      timestamps: true,
     },
     {
       charset: "utf8",
