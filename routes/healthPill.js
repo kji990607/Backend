@@ -76,25 +76,22 @@ rule.hour = controlTime[0];
 
 
 router.get("/api/control", isLoggedIn, async (req, res) => {
+  //날짜는 주소로 받아옴
   const date = req.query.date;
-  console.log(date);
   try {
-    const itsControl = await Date.findOne({
-      attributes:["isControl"],
-      where : {userId: req.user.id}, // DB의 Date테이블에서 iscontrol 값 받아와서 True인지 False인지 확인
+    const exDate = await Date.findOne({
+      attributes: ["isControl"],
+      where: { date: date, userId: req.user.id },
     });
-    if (itsControl.isControl) {
-      res.send("오늘 약 복용 완료");
+    if (exDate.isControl) {
+      res.send("오늘 피임약 복용 완료");
     } else {
-      res.send("오늘 약 복용 전");
+      res.send("오늘 피임약 복용 전");
     }
-
-
   } catch (error) {
     console.error(error);
     return next(error);
   }
-
 });
 
 module.exports = router;
