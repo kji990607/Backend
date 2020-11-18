@@ -23,27 +23,27 @@ router.post("/api/main/control", isLoggedIn, async (req, res) => {
       await Control.create({
         controlStart: controlStart,
         controlEnd: moment(controlStart, "YYYY-MM-DD")
-          .add(180, "d")
-          .format("YYYY-MM-DD"),
+            .add(180, "d")
+            .format("YYYY-MM-DD"),
         controlHour: controlHour,
         controlMinute: controlMinute,
         userId: req.user.id,
       });
     } else {
       await Control.create(
-        {
-          controlStart: controlStart,
-          controlEnd: controlEnd,
-          controlHour: controlHour,
-          controlMinute: controlMinute,
-          userId: req.user.id,
-        },
-        {
-          where: { userId: req.user.id },
-        }
+          {
+            controlStart: controlStart,
+            controlEnd: controlEnd,
+            controlHour: controlHour,
+            controlMinute: controlMinute,
+            userId: req.user.id,
+          },
+          {
+            where: { userId: req.user.id },
+          }
       );
     }
-    console.log("ocontrol.create까지 됨");
+    console.log("control.create 까지 됨");
     console.log(req.user.id);
     const exControl = await Control.findAll({
       limit: 1,
@@ -55,20 +55,21 @@ router.post("/api/main/control", isLoggedIn, async (req, res) => {
       ],
       where: { userId: req.user.id },
       order: [["createdAt", "DESC"]],
-    });
-    console.log("테슷흐", exControl[0].controlStart);
 
-    for (let i = exControl.controlStart; i <= exControl.controlEnd; i++) {
-      var alarm = schedule.schedulejob(
-        '0 exControl.controlMinute exControl.controlHour * * *',
-        function (){
-          //cron? schedule?
-          console.log("알람 울리기");
-          alert("성공"); //res.redirect로 알람 페이지로 연결
-          if (i > exControl.controlEnd) {
-            alarm.cancel();
+    });
+
+
+    console.log(exControl[0].controlStart, exControl[0].controlEnd);
+
+    for (let i = exControl[0].controlStart; i <= exControl[0].controlEnd; i++) {
+      var alarm = schedule.scheduleJob('0 exControl[0].controlMinute exControl[0].controlHour * * *`', function (){
+            //cron? schedule?
+            console.log("알람 울리기");
+            alert("성공"); //res.redirect로 알람 페이지로 연결
+            if (i > exControl.controlEnd) {
+              alarm.cancel();
+            }
           }
-        }
       );
     }
 
