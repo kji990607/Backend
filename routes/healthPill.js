@@ -42,8 +42,10 @@ router.post("/api/main/control", isLoggedIn, async (req, res) => {
     console.log("ocontrol.create까지 됨");
     console.log(req.user.id);
     const exControl = await Control.findAll({
+      limit:1,
       attributes: ["controlStart", "controlEnd", "controlHour", "controlMinute"],
       where : {userId: req.user.id},
+      order: [ [ 'createdAt', 'DESC' ]]
     });
     console.log("findAll까지");
     console.log(exControl.controlStart, exControl.controlEnd);
