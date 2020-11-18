@@ -13,8 +13,9 @@ moment.tz.setDefault("Asia/Seoul");
 
 router.post("/api/main/control", isLoggedIn, async (req, res) => {
   const {controlStart, controlEnd, controlTime} = req.body;
+  console.log("뀨유 로그인 사용자",req.user.id);
   try {
-    const controlClock = req.body.controlTime.split(':');
+    const controlClock = controlTime.split(':');
     const controlHour = controlClock[0];
     const controlMinute = controlClock[1];
     if(controlEnd === null) {
@@ -36,6 +37,23 @@ router.post("/api/main/control", isLoggedIn, async (req, res) => {
         userId: req.user.id,
       },{
         where: {userId: req.user.id},
+      });
+    }
+    console.log("ocontrol.create까지 됨");
+    console.log(req.user.id);
+    const exControl = await Control.findAll({
+      attributes: ["controlStart", "controlEnd", "controlHour", "controlMinute"],
+      where : {userId: req.user.id},
+    });
+    console.log("findAll까지");
+    console.log(exControl.controlStart, exControl.controlEnd);
+    for (let i=exControl.controlStart; i<=exControl.controlEnd; i++) {
+      var alarm = schedule.schedulejob('0 controlMinute controlHour * * *', () => { //cron? schedule?
+        console.log('알람 울리기');
+        alert('성공'); //res.redirect로 알람 페이지로 연결
+        if (i > exControl.controlEnd) {
+          alarm.cancel();
+        }
       });
     }
 
@@ -60,40 +78,23 @@ rule.hour = controlTime[0];
 router.get("/api/control", isLoggedIn, async (req, res) => {
   const date = req.query.date;
   console.log(date);
-  // try {
-  //   Date.findOne({
-  //     attributes:[isControl],
-  //     where : {date:date, userId: req.user.id}, // DB의 Date테이블에서 iscontrol 값 받아와서 True인지 False인지 확인
-  //   });
-  //   if (isControl) {
-  //     res.send("오늘 약 복용 완료");
-  //   } else {
-  //     res.send("오늘 약 복용 전");
-  //   }
-  // } catch (error) {
-  //   console.error(error);
-  //   return next(error);
-  // }
   try {
-    Control.findAll({
-      attributes: [controlStart, controlEnd, controlHour, controlMinute],
-      where : {date:date, userId: req.user.id},
-    })
-    for(let i=controlStart; i<= controlEnd; i++) {
-      const alarm = cron.schedule('0 controlMinute controlHour * * *', () => {
-        console.log('알람 울리기');
-        alert('성공'); //res.redirect로 알람 페이지로 연결
-        if (i > controlEnd) {
-          alarm.destroy();
-        }
-      });
+    const itsControl = await Date.findOne({
+      attributes:["isControl"],
+      where : {userId: req.user.id}, // DB의 Date테이블에서 iscontrol 값 받아와서 True인지 False인지 확인
+    });
+    if (itsControl.isControl) {
+      res.send("오늘 약 복용 완료");
+    } else {
+      res.send("오늘 약 복용 전");
     }
+
+
   } catch (error) {
     console.error(error);
     return next(error);
   }
+
 });
-
-
 
 module.exports = router;
