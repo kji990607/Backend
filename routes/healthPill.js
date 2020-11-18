@@ -56,8 +56,7 @@ router.post("/api/main/control", isLoggedIn, async (req, res) => {
       where: { userId: req.user.id },
       order: [["createdAt", "DESC"]],
     });
-    console.log("findAll까지");
-    console.log(exControl.controlEnd);
+    console.log("테슷흐", exControl[0].controlStart);
 
     for (let i = exControl.controlStart; i <= exControl.controlEnd; i++) {
       var alarm = schedule.schedulejob(
