@@ -5,7 +5,7 @@ const { isLoggedIn } = require("./middlewares");
 // const cron = require("node-cron");
 const router = express.Router();
 const moment = require("moment");
-// const rule = new schedule.RecurrenceRule();
+const rule = new schedule.RecurrenceRule();
 //const j = schedule.scheduleJob(rule, function () {});
 
 require("moment-timezone");
@@ -59,7 +59,25 @@ router.post("/api/main/control", isLoggedIn, async (req, res) => {
     const start = moment(exControl[0].controlStart);
     const end = moment(exControl[0].controlEnd);
     let days = moment.duration(end.diff(start)).asDays();
+
+    console.log("days: ", days);
+    console.log("controlMin: ", exControl[0].controlMinute);
+    console.log("controlHour: ", exControl[0].controlHour);
+
     //하루에 한 번 알람. controlEnd-controlStart 기간만큼 for문 돌리기
+    for(let i=0; i<=days; i++){
+      let tempDate = moment(start).add(i, 'd');
+      tempDate = moment(tempDate).format('YYYY-MM-DD');
+      console.log("Start:", start);
+      rule.dayOfWeek = [0, new schedule.Range(1,6)];
+      rule.minute = exControl[0].controlMinute;
+      rule.hour = exControl[0].controlHour;
+      var j = schedule.scheduleJob(rule, function () {
+        console.log("알람 울리기");
+        alert("성공");
+      });
+    }
+
     /*
     for (let i = exControl[0].controlStart; i <= exControl[0].controlEnd; i++) {
       var alarm = schedule.scheduleJob('0 exControl[0].controlMinute exControl[0].controlHour * * *`', function (){
@@ -89,7 +107,7 @@ rule.hour = controlTime[0];
     });
  */
 
-router.get("/api/control", isLoggedIn, async (req, res) => {
+router.get("/api/control/", isLoggedIn, async (req, res) => {
   //날짜는 주소로 받아옴
   const date = req.query.date;
   try {
@@ -102,6 +120,8 @@ router.get("/api/control", isLoggedIn, async (req, res) => {
     } else {
       res.send("오늘 피임약 복용 전");
     }
+
+
   } catch (error) {
     console.error(error);
     return next(error);
