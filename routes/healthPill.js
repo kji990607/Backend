@@ -23,24 +23,24 @@ router.post("/api/main/control", isLoggedIn, async (req, res) => {
       await Control.create({
         controlStart: controlStart,
         controlEnd: moment(controlStart, "YYYY-MM-DD")
-            .add(180, "d")
-            .format("YYYY-MM-DD"),
+          .add(180, "d")
+          .format("YYYY-MM-DD"),
         controlHour: controlHour,
         controlMinute: controlMinute,
         userId: req.user.id,
       });
     } else {
       await Control.create(
-          {
-            controlStart: controlStart,
-            controlEnd: controlEnd,
-            controlHour: controlHour,
-            controlMinute: controlMinute,
-            userId: req.user.id,
-          },
-          {
-            where: { userId: req.user.id },
-          }
+        {
+          controlStart: controlStart,
+          controlEnd: controlEnd,
+          controlHour: controlHour,
+          controlMinute: controlMinute,
+          userId: req.user.id,
+        },
+        {
+          where: { userId: req.user.id },
+        }
       );
     }
     console.log("control.create 까지 됨");
@@ -55,12 +55,10 @@ router.post("/api/main/control", isLoggedIn, async (req, res) => {
       ],
       where: { userId: req.user.id },
       order: [["createdAt", "DESC"]],
-
     });
-
-
     console.log(exControl[0].controlStart, exControl[0].controlEnd);
-
+    //for문을 날짜로 써서 생기는 오류. 하루에 한 번 알람이니 끝-시작 날짜 기간만큼 for문 돌리기
+    /*
     for (let i = exControl[0].controlStart; i <= exControl[0].controlEnd; i++) {
       var alarm = schedule.scheduleJob('0 exControl[0].controlMinute exControl[0].controlHour * * *`', function (){
             //cron? schedule?
@@ -72,7 +70,7 @@ router.post("/api/main/control", isLoggedIn, async (req, res) => {
           }
       );
     }
-
+    */
     return res.status(201).json({ completed: true });
     return res.send("라우터 연결 됨");
   } catch (error) {
