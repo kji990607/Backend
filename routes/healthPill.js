@@ -56,8 +56,10 @@ router.post("/api/main/control", isLoggedIn, async (req, res) => {
       where: { userId: req.user.id },
       order: [["createdAt", "DESC"]],
     });
-    console.log(exControl[0].controlStart, exControl[0].controlEnd);
-    //for문을 날짜로 써서 생기는 오류. 하루에 한 번 알람이니 끝-시작 날짜 기간만큼 for문 돌리기
+    const start = moment(exControl[0].controlStart);
+    const end = moment(exControl[0].controlEnd);
+    let days = moment.duration(end.diff(start)).asDays();
+    //하루에 한 번 알람. controlEnd-controlStart 기간만큼 for문 돌리기
     /*
     for (let i = exControl[0].controlStart; i <= exControl[0].controlEnd; i++) {
       var alarm = schedule.scheduleJob('0 exControl[0].controlMinute exControl[0].controlHour * * *`', function (){
