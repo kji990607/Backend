@@ -131,8 +131,25 @@ router.post("/api/main/date", isLoggedIn, async (req, res) => {
 //입력된 정보가 있으면 보내주고, 없으면 "입력된 정보가 없습니다."
 router.get("/api/main/", isLoggedIn, async (req, res) => {
   //날짜는 req.body로 받아옴
-  const date = req.query.date;
-  console.log("♥", date);
+  const date = req.query.Date_send;
+  try {
+    const exDate = await Date.findOne({
+      where: { date: date, userId: req.user.id },
+    });
+    if (exDate) {
+      res.send(exDate);
+    } else {
+      res.send("입력된 정보가 없습니다.");
+    }
+  } catch (error) {
+    console.error(error);
+    return next(error);
+  }
+});
+
+router.get("/api/main/today", isLoggedIn, async (req, res) => {
+  //날짜는 req.body로 받아옴
+  const date = req.query.Today_send;
   try {
     const exDate = await Date.findOne({
       where: { date: date, userId: req.user.id },
