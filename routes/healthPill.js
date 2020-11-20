@@ -72,25 +72,15 @@ router.post("/api/main/control", isLoggedIn, async (req, res) => {
       rule.dayOfWeek = [0, new schedule.Range(1,6)];
       rule.minute = exControl[0].controlMinute;
       rule.hour = exControl[0].controlHour;
+      console.log("controlHour:" , exControl[0].controlHour);
+      console.log("controlMinute:" , exControl[0].controlMinute);
       var j = schedule.scheduleJob(rule, function () {
         console.log("알람 울리기");
-        alert("성공");
       });
     }
+    // j.cancel();
 
-    /*
-    for (let i = exControl[0].controlStart; i <= exControl[0].controlEnd; i++) {
-      var alarm = schedule.scheduleJob('0 exControl[0].controlMinute exControl[0].controlHour * * *`', function (){
-            //cron? schedule?
-            console.log("알람 울리기");
-            alert("성공"); //res.redirect로 알람 페이지로 연결
-            if (i > exControl.controlEnd) {
-              alarm.cancel();
-            }
-          }
-      );
-    }
-    */
+
     return res.status(201).json({ completed: true });
     return res.send("라우터 연결 됨");
   } catch (error) {
