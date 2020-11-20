@@ -2,10 +2,10 @@ const { Control, Date } = require("../models");
 const schedule = require("node-schedule");
 const express = require("express");
 const { isLoggedIn } = require("./middlewares");
-// const cron = require("node-cron");
+const cron = require('node-cron');
 const router = express.Router();
 const moment = require("moment");
-const rule = new schedule.RecurrenceRule();
+// const rule = new schedule.RecurrenceRule();
 //const j = schedule.scheduleJob(rule, function () {});
 
 require("moment-timezone");
@@ -69,13 +69,16 @@ router.post("/api/main/control", isLoggedIn, async (req, res) => {
       let tempDate = moment(start).add(i, 'd');
       tempDate = moment(tempDate).format('YYYY-MM-DD');
       console.log("Start:", start);
-      rule.dayOfWeek = [0, new schedule.Range(1,6)];
-      rule.minute = exControl[0].controlMinute;
-      rule.hour = exControl[0].controlHour;
-      console.log("controlHour:" , exControl[0].controlHour);
-      console.log("controlMinute:" , exControl[0].controlMinute);
-      var j = schedule.scheduleJob(rule, function () {
-        console.log("알람 울리기");
+      // rule.dayOfWeek = [0, new schedule.Range(1,6)];
+      // rule.minute = exControl[0].controlMinute;
+      // rule.hour = exControl[0].controlHour;
+      // console.log("controlHour:" , exControl[0].controlHour);
+      // console.log("controlMinute:" , exControl[0].controlMinute);
+      // var j = schedule.scheduleJob(rule, function () {
+      //   console.log("알람 울리기");
+      // });
+      cron.schedule(`* ${exControl[0].controlMinute} ${exControl[0].controlHour} * * 0-6`,()=> {
+        console.log('cron');
       });
     }
     // j.cancel();
