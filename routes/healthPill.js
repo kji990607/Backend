@@ -105,7 +105,10 @@ router.get("/api/control/", isLoggedIn, async (req, res) => {
       attributes: ["isControl"],
       where: { date: date, userId: req.user.id },
     });
-    if (exDate.isControl) {
+    if (exDate === null) {
+      res.send("입력된 피임약 정보 없음");
+    }
+    else if (exDate.isControl) {
       res.send("오늘 피임약 복용 완료");
     } else {
       res.send("오늘 피임약 복용 전");
