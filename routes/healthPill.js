@@ -2,7 +2,7 @@ const { Control, Date } = require("../models");
 const schedule = require("node-schedule");
 const express = require("express");
 const { isLoggedIn } = require("./middlewares");
-const cron = require('node-cron');
+const cron = require("node-cron");
 const router = express.Router();
 const moment = require("moment");
 // const rule = new schedule.RecurrenceRule();
@@ -56,33 +56,25 @@ router.post("/api/main/control", isLoggedIn, async (req, res) => {
       where: { userId: req.user.id },
       order: [["createdAt", "DESC"]],
     });
+    //알람 시작일
     const start = moment(exControl[0].controlStart);
+    //알람 종료일
     const end = moment(exControl[0].controlEnd);
+    //알람 기간
     let days = moment.duration(end.diff(start)).asDays();
-
-    console.log("days: ", days);
-    console.log("controlMin: ", exControl[0].controlMinute);
-    console.log("controlHour: ", exControl[0].controlHour);
-
-    //하루에 한 번 알람. controlEnd-controlStart 기간만큼 for문 돌리기
-    for(let i=0; i<=days; i++){
-      let tempDate = moment(start).add(i, 'd');
-      tempDate = moment(tempDate).format('YYYY-MM-DD');
-      console.log("Start:", start);
-      // rule.dayOfWeek = [0, new schedule.Range(1,6)];
-      // rule.minute = exControl[0].controlMinute;
-      // rule.hour = exControl[0].controlHour;
-      // console.log("controlHour:" , exControl[0].controlHour);
-      // console.log("controlMinute:" , exControl[0].controlMinute);
-      // var j = schedule.scheduleJob(rule, function () {
-      //   console.log("알람 울리기");
-      // });
-      cron.schedule(`* ${exControl[0].controlMinute} ${exControl[0].controlHour} * * 0-6`,()=> {
-        console.log('cron');
-      });
-    }
-    // j.cancel();
-
+    /*
+    알람 기간만큼 for문
+    시작 날짜. 시간을 변수로 만들어서 cron 시작
+    cron이 한 번 실행되면 변수에 하루를 더함
+    내일 해 볼것!!
+     */
+    //할 일
+    cron.schedule(
+      `0 ${exControl[0].controlMinute} ${exControl[0].controlHour} * * 0-6`,
+      () => {
+        console.log("cron");
+      }
+    );
 
     return res.status(201).json({ completed: true });
     return res.send("라우터 연결 됨");
@@ -110,14 +102,11 @@ router.get("/api/control/", isLoggedIn, async (req, res) => {
     });
     if (exDate === null) {
       res.send("입력된 피임약 정보 없음");
-    }
-    else if (exDate.isControl) {
+    } else if (exDate.isControl) {
       res.send("오늘 피임약 복용 완료");
     } else {
       res.send("오늘 피임약 복용 전");
     }
-
-
   } catch (error) {
     console.error(error);
     return next(error);
