@@ -51,3 +51,26 @@ app.use("/", healthPillRouter);
 app.listen(4000, () => {
   console.log("http://localhost:4000/ 에서 실행중");
 });
+app.set('port', process.env.PORT || 8001);
+
+if (process.env.NODE_ENV === 'production'){
+    app.use (morgan('combined'));
+}else {
+    app.use(morgan('dev'));
+}
+app.use (express.static(path.join(__dirname, 'public')));
+app.use(CookieParser(process.env.COOKIE_SECRET));
+const sessionOption = {
+    resave: false,
+    saveUninitialized: false,
+    secret: process.env.COOKIE_SECRET,
+    cookie: {
+        httpOnly: true,
+        secure: false,
+    },
+};
+if(process.env.NODE_ENV === 'production'){
+    sessionOption.proxy = true;
+}
+app.use(session(sessionOption));
+app.use(flash());
