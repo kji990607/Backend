@@ -4,8 +4,8 @@
   "description": "passengers_fullmoon",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js",
-    "dev": "nodemon app"
+    "start": "cross-env NODE_ENV=production PORT=80 node server",
+    "dev": "nodemon server"
   },
   "repository": {
     "type": "git",
