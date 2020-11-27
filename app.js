@@ -6,8 +6,8 @@ const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
 const session = require("express-session");
 const passport = require("passport");
-const CookieParser = require('cookie-parser');
-const flash = require('connect-flash');
+const cookieParser = require("cookie-parser");
+const flash = require("connect-flash");
 
 const authRouter = require("./routes/auth");
 const calendarRouter = require("./routes/calendar");
@@ -28,7 +28,7 @@ passportConfig(passport);
 
 app.set("view engine", "pug");
 
-app.use(morgan("dev"));
+app.use(morgan("combined"));
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use("/", express.static(path.join(__dirname, "public")));
 app.use(express.json());
@@ -47,32 +47,34 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 app.use("/", authRouter);
-app.use("/",calendarRouter);
+app.use("/", calendarRouter);
 app.use("/", healthPillRouter);
 
 app.listen(4000, () => {
   console.log("http://localhost:4000/ 에서 실행중");
 });
-app.set('port', process.env.PORT || 8001);
+app.set("port", process.env.PORT || 8001);
 
-if (process.env.NODE_ENV === 'production'){
-    app.use (morgan('combined'));
-}else {
-    app.use(morgan('dev'));
+if (process.env.NODE_ENV === "production") {
+  app.use(morgan("combined"));
+} else {
+  app.use(morgan("dev"));
 }
-app.use (express.static(path.join(__dirname, 'public')));
-app.use(CookieParser(process.env.COOKIE_SECRET));
+app.use(express.static(path.join(__dirname, "public")));
+app.use(cookieParser(process.env.COOKIE_SECRET));
 const sessionOption = {
-    resave: false,
-    saveUninitialized: false,
-    secret: process.env.COOKIE_SECRET,
-    cookie: {
-        httpOnly: true,
-        secure: false,
-    },
+  resave: false,
+  saveUninitialized: false,
+  secret: process.env.COOKIE_SECRET,
+  cookie: {
+    httpOnly: true,
+    secure: false,
+  },
 };
-if(process.env.NODE_ENV === 'production'){
-    sessionOption.proxy = true;
+if (process.env.NODE_ENV === "production") {
+  //sessionOption.proxy = true;
+  // sessionOption.cookie.secure = true;
 }
+
 app.use(session(sessionOption));
 app.use(flash());
