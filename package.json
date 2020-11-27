@@ -4,7 +4,7 @@
   "description": "passengers_fullmoon",
   "main": "app.js",
   "scripts": {
-    "start": "app.js",
+    "start": "node app.js",
     "dev": "nodemon server"
   },
   "repository": {
