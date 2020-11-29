@@ -51,7 +51,7 @@ app.use("/", calendarRouter);
 app.use("/", healthPillRouter);
 
 app.listen(4000, () => {
-  console.log("http://localhost:4000/ 에서 실행중");
+  console.log("실행중");
 });
 app.set("port", process.env.PORT || 8001);
 
@@ -71,10 +71,11 @@ const sessionOption = {
     secure: false,
   },
 };
-if (process.env.NODE_ENV === "production") {
-  //sessionOption.proxy = true;
-  // sessionOption.cookie.secure = true;
-}
+
+// if (process.env.NODE_ENV === "production") {
+//   sessionOption.proxy = true;
+//   sessionOption.cookie.secure = true;
+// }
 
 app.use(session(sessionOption));
 app.use(flash());

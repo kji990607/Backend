@@ -76,6 +76,7 @@ router.post("/api/main/date", isLoggedIn, async (req, res) => {
     if (exCycle) {
       if (cycleStart) {
         //잘못된 입력. 이전 기록의 cycleEnd를 미리 설정해야 함.
+        res.header("Access-Control-Allow-Origin", "*");
         res.send("최근 생리 종료일을 먼저 입력해야 합니다.");
       } else if (cycleEnd) {
         //사용자가 cycleEnd를 설정: cycles 테이블 bleedEnd 업데이트
@@ -91,6 +92,7 @@ router.post("/api/main/date", isLoggedIn, async (req, res) => {
             },
           }
         );
+        res.header("Access-Control-Allow-Origin", "*");
         return res.status(200).json({ completed: true });
       }
     } else {
@@ -101,6 +103,7 @@ router.post("/api/main/date", isLoggedIn, async (req, res) => {
           bleedStart: cycleStart,
           userId: req.user.id,
         });
+        res.header("Access-Control-Allow-Origin", "*");
         return res.status(200).json({ completed: true });
       } else if (cycleEnd) {
         //사용자가 cycleEnd를 설정: cycles 테이블 bleedEnd 저장, bleedStart = bleedEnd - cycles.meanPeriod로 계산 후 저장
@@ -116,8 +119,10 @@ router.post("/api/main/date", isLoggedIn, async (req, res) => {
           bleedEnd: cycleEnd,
           userId: req.user.id,
         });
+        res.header("Access-Control-Allow-Origin", "*");
         return res.status(200).json({ completed: true });
       } else {
+        res.header("Access-Control-Allow-Origin", "*");
         return res.status(200).json({ completed: true });
       }
     }
@@ -137,8 +142,10 @@ router.get("/api/main/", isLoggedIn, async (req, res) => {
       where: { date: date, userId: req.user.id },
     });
     if (exDate) {
+      res.header("Access-Control-Allow-Origin", "*");
       res.send(exDate);
     } else {
+      res.header("Access-Control-Allow-Origin", "*");
       res.send("입력된 정보가 없습니다.");
     }
   } catch (error) {
@@ -155,8 +162,10 @@ router.get("/api/main/today", isLoggedIn, async (req, res) => {
       where: { date: date, userId: req.user.id },
     });
     if (exDate) {
+      res.header("Access-Control-Allow-Origin", "*");
       res.send(exDate);
     } else {
+      res.header("Access-Control-Allow-Origin", "*");
       res.send("입력된 정보가 없습니다.");
     }
   } catch (error) {
