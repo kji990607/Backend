@@ -75,7 +75,6 @@ router.post("/api/main/control", isLoggedIn, async (req, res) => {
         console.log("cron");
       }
     );
-    res.header("Access-Control-Allow-Origin", "*");
     return res.status(201).json({ completed: true });
     return res.send("라우터 연결 됨");
   } catch (error) {
@@ -101,13 +100,10 @@ router.get("/api/control/", isLoggedIn, async (req, res) => {
       where: { date: date, userId: req.user.id },
     });
     if (exDate === null) {
-      res.header("Access-Control-Allow-Origin", "*");
       res.send("입력된 피임약 정보 없음");
     } else if (exDate.isControl) {
-      res.header("Access-Control-Allow-Origin", "*");
       res.send("오늘 피임약 복용 완료");
     } else {
-      res.header("Access-Control-Allow-Origin", "*");
       res.send("오늘 피임약 복용 전");
     }
   } catch (error) {

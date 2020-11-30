@@ -25,7 +25,6 @@ sequelize
   })
   .catch(console.error);
 passportConfig(passport);
-
 app.set("view engine", "pug");
 
 app.use(morgan("combined"));

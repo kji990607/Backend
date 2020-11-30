@@ -54,7 +54,6 @@ router.post("/api/auth/register", isNotLoggedIn, async (req, res) => {
         userId: loginUser.id,
       });
     }
-    res.header("Access-Control-Allow-Origin", "*");
     return res.status(201).json({ completed: true });
   } catch (error) {
     console.error(error);
@@ -70,7 +69,6 @@ router.post("/api/auth/login", isNotLoggedIn, async (req, res, next) => {
       return next(authError);
     }
     if (!user) {
-      res.header("Access-Control-Allow-Origin", "*");
       return res.send(info.message);
     }
     return req.login(user, (loginError) => {
@@ -78,7 +76,6 @@ router.post("/api/auth/login", isNotLoggedIn, async (req, res, next) => {
         console.error(loginError);
         return next(loginError);
       }
-      res.header("Access-Control-Allow-Origin", "*");
       return res.json({id: user.id, name: user.userName});
     });
   })(req, res, next);
@@ -86,10 +83,10 @@ router.post("/api/auth/login", isNotLoggedIn, async (req, res, next) => {
 
 //로그아웃
 router.get("/api/auth/logout", isLoggedIn, async (req, res) => {
+  console.log(req.user.id);
   req.logout();
   req.session.destroy();
   console.log("로그아웃");
-  res.header("Access-Control-Allow-Origin", "*");
   return res.status(200).send("로그아웃 되었습니다");
 });
 
