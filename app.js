@@ -4,9 +4,9 @@ const path = require("path");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
+const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const passport = require("passport");
-const cookieParser = require("cookie-parser");
 const flash = require("connect-flash");
 
 const authRouter = require("./routes/auth");
@@ -54,11 +54,12 @@ app.listen(4000, () => {
 });
 app.set("port", process.env.PORT || 8001);
 
-if (process.env.NODE_ENV === "production") {
-  app.use(morgan("combined"));
-} else {
-  app.use(morgan("dev"));
-}
+// if (process.env.NODE_ENV === "production") {
+//   app.use(morgan("combined"));
+// } else {
+//   app.use(morgan("dev"));
+// }
+
 app.use(express.static(path.join(__dirname, "public")));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 const sessionOption = {
