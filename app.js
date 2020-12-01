@@ -29,7 +29,12 @@ app.set("view engine", "pug");
 
 app.use(morgan("combined"));
 app.use(cors({ origin: "http://13.124.67.98", credentials: true }));
-app.use("/", express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, 'build')));
+
+
+app.get('/*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
