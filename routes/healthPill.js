@@ -75,7 +75,6 @@ router.post("/api/main/control", isLoggedIn, async (req, res) => {
         console.log("cron");
       }
     );
-
     return res.status(201).json({ completed: true });
     return res.send("라우터 연결 됨");
   } catch (error) {

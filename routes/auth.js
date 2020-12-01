@@ -83,6 +83,7 @@ router.post("/api/auth/login", isNotLoggedIn, async (req, res, next) => {
 
 //로그아웃
 router.get("/api/auth/logout", isLoggedIn, async (req, res) => {
+  console.log(req.user.id);
   req.logout();
   req.session.destroy();
   console.log("로그아웃");
