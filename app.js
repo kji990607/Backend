@@ -64,12 +64,14 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 const sessionOption = {
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
   secret: process.env.COOKIE_SECRET,
   cookie: {
     httpOnly: true,
-    secure: false,
+    secure: true,
+    sameSite: "none",
   },
+  proxy: true,
 };
 
 // if (process.env.NODE_ENV === "production") {
