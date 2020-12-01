@@ -52,7 +52,7 @@ app.use("/", healthPillRouter);
 app.listen(4000, () => {
   console.log("실행중");
 });
-app.set("port", process.env.PORT || 8001);
+//app.set("port", process.env.PORT || 8001);
 
 // if (process.env.NODE_ENV === "production") {
 //   app.use(morgan("combined"));
