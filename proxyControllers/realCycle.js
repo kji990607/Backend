@@ -8,7 +8,7 @@ let meanCycle = 0;
 const checkUserID1 = async (req, res, next) => {
   const exUser = await User.findOne({
     attributes: ["id"],
-    where: { id: req.body.parameters.user_ID },
+    where: { id: req.body.parameters.user_ID.value},
   });
   try {
     if (exUser) {
