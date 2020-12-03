@@ -13,7 +13,6 @@ moment.tz.setDefault("Asia/Seoul");
 
 router.post("/api/main/control", isLoggedIn, async (req, res) => {
   const { controlStart, controlEnd, controlTime } = req.body;
-  console.log("뀨유 로그인 사용자", req.user.id);
   try {
     const controlClock = controlTime.split(":");
     const controlHour = controlClock[0];
