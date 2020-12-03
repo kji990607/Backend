@@ -49,7 +49,7 @@ app.use(passport.session());
 app.use("/", authRouter);
 app.use("/", calendarRouter);
 app.use("/", healthPillRouter);
-app.use("/", proxyIndex);
+//app.use("/", proxyIndex);
 
 app.use(express.static(path.join(__dirname, "build")));
 
