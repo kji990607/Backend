@@ -7,7 +7,7 @@ const json = require("./responseController");
 const askMeanCycle = async (req, res, next) => {
   console.log("요청:", req.body);
   try {
-    //
+    //조회
     const exUser = await User.findOne({
       attributes: ["meanCycle"],
       where: { userId: req.user.id },
