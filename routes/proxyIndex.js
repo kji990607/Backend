@@ -6,6 +6,6 @@ const { isLoggedIn } = require("./middlewares");
 const { askMeanCycle } = require("../proxyControllers/realCycle");
 
 //프록시 주소 라우터
-router.post("/answer.meanCycle", isLoggedIn, askMeanCycle);
+router.post("/answer.meanCycle", askMeanCycle);
 
 module.exports = router;
