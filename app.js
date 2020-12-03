@@ -12,6 +12,7 @@ const flash = require("connect-flash");
 const authRouter = require("./routes/auth");
 const calendarRouter = require("./routes/calendar");
 const healthPillRouter = require("./routes/healthPill");
+const proxyIndex = require("./routes/proxyIndex");
 const { sequelize } = require("./models");
 const passportConfig = require("./passport");
 
@@ -29,13 +30,13 @@ app.set("view engine", "pug");
 
 app.use(morgan("combined"));
 app.use(cors({ origin: "http://13.124.67.98", credentials: true }));
-app.use("/", express.static(path.join(__dirname, "public")));
+
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
   session({
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
     secret: process.env.COOKIE_SECRET,
     cookie: {
       httpOnly: true,
@@ -48,11 +49,18 @@ app.use(passport.session());
 app.use("/", authRouter);
 app.use("/", calendarRouter);
 app.use("/", healthPillRouter);
+app.use("/", proxyIndex);
+
+app.use(express.static(path.join(__dirname, "build")));
+
+app.get("/*", (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
 
 app.listen(4000, () => {
   console.log("실행중");
 });
-app.set("port", process.env.PORT || 8001);
+//app.set("port", process.env.PORT || 8001);
 
 // if (process.env.NODE_ENV === "production") {
 //   app.use(morgan("combined"));
@@ -68,8 +76,10 @@ const sessionOption = {
   secret: process.env.COOKIE_SECRET,
   cookie: {
     httpOnly: true,
-    secure: false,
+    secure: true,
+    sameSite: "none",
   },
+  proxy: true,
 };
 
 // if (process.env.NODE_ENV === "production") {
