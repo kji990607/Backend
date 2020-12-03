@@ -1,15 +1,21 @@
-/*
-const { table } = require("../models");
+//실제 생리 주기 관련 정보 처리
+const { User } = require("../models");
 
 const json = require("./responseController");
 
-const sample1 = async (req, res, next) => {
+//평균 주기 물어볼 경우
+const askMeanCycle = async (req, res, next) => {
   try {
-    //처리
+    //
+    const exUser = await User.findOne({
+      attributes: ["meanCycle"],
+      where: { userId: req.user.id },
+    });
+    const meanCycle = exUser.meanCycle;
     //처리 후 responseController형식에 맞춰줘야 함. nugu 홈페이지 responseSample 형식으로
     const resObj = json.resSample();
     resObj.version = req.body.version;
-    resObj.a = b;
+    resObj.output.meanCycle = meanCycle;
     res.json(resObj);
     res.end();
     return;
@@ -19,10 +25,6 @@ const sample1 = async (req, res, next) => {
   }
 };
 
-const sample2 = async (res, res, next) => {};
-
 module.exports = {
-  sample1,
-  sample2,
+  askMeanCycle,
 };
- */
