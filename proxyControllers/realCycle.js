@@ -8,12 +8,12 @@ let meanCycle = 0;
 //평균 주기 물어볼 경우
 const askMeanCycle = async (req, res, next) => {
   console.log(req.body);
-  console.log(req.body.action.parameters.user_ID);
+  console.log(req.body.action.parameters.user_ID.value);
   try {
     //조회
     const exUser = await User.findOne({
       attributes: ["meanCycle"],
-      where: { id: req.body.action.parameters.user_ID },
+      where: { id: req.body.action.parameters.user_ID.value },
     });
     if (exUser) {
       meanCycle = exUser.meanCycle;
