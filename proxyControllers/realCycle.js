@@ -5,6 +5,7 @@ const json = require("./responseController");
 
 //평균 주기 물어볼 경우
 const askMeanCycle = async (req, res, next) => {
+  console.log("요청:", req.body);
   try {
     //
     const exUser = await User.findOne({
