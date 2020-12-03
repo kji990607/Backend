@@ -12,6 +12,7 @@ const flash = require("connect-flash");
 const authRouter = require("./routes/auth");
 const calendarRouter = require("./routes/calendar");
 const healthPillRouter = require("./routes/healthPill");
+const proxyIndex = require("./routes/proxyIndex");
 const { sequelize } = require("./models");
 const passportConfig = require("./passport");
 
@@ -29,9 +30,6 @@ app.set("view engine", "pug");
 
 app.use(morgan("combined"));
 app.use(cors({ origin: "http://13.124.67.98", credentials: true }));
-
-
-
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -51,12 +49,12 @@ app.use(passport.session());
 app.use("/", authRouter);
 app.use("/", calendarRouter);
 app.use("/", healthPillRouter);
+app.use("/", proxyIndex);
 
+app.use(express.static(path.join(__dirname, "build")));
 
-app.use(express.static(path.join(__dirname, 'build')));
-
-app.get('/*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+app.get("/*", (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
 app.listen(4000, () => {
