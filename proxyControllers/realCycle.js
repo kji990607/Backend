@@ -6,6 +6,8 @@ let userId = 0;
 let meanCycle = 0;
 
 const checkUserID1 = async (req, res, next) => {
+  console.log(req.body);
+  console.log(req.body.parameters.user_ID);
   const exUser = await User.findOne({
     attributes: ["id"],
     where: { id: req.body.parameters.user_ID.value},
