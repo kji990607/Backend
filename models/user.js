@@ -59,9 +59,5 @@ module.exports = (sequelize, DataTypes) => {
     User.hasMany(models.Predict);
   };
 
-  User.associate = function (models) {
-    User.belongsTo(models.Pill);
-  };
-
   return User;
 };

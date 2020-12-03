@@ -18,7 +18,6 @@ db.User = require("./user")(sequelize, Sequelize);
 db.Cycle = require("./cycle")(sequelize, Sequelize);
 db.Control = require("./control")(sequelize, Sequelize);
 db.Date = require("./date")(sequelize, Sequelize);
-db.Pill = require("./pill")(sequelize, Sequelize);
 db.Predict = require("./predict")(sequelize, Sequelize);
 
 Object.keys(db).forEach((modelName) => {
