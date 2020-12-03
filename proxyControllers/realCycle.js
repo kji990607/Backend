@@ -15,16 +15,18 @@ const askMeanCycle = async (req, res, next) => {
       attributes: ["meanCycle"],
       where: { id: req.body.action.parameters.user_ID.value },
     });
-    if (exUser) {
+    if (exUser.meanCycle === null) {
+      meanCycle = "널값"
+    }
+    else if (exUser) {
       meanCycle = exUser.meanCycle;
     } else {
-      meanCycle = "없음";
+      meanCycle = "아이디 없음";
     }
     //처리 후 responseController형식에 맞춰줘야 함. nugu 홈페이지 responseSample 형식으로x
     const resObj = json.resSample();
     resObj.version = req.body.version;
     resObj.output.meanCycle = meanCycle;
-    resObj.output.user_ID = req.body.action.parameters.user_ID;
     res.json(resObj);
     res.end();
     return;
