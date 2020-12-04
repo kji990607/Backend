@@ -17,8 +17,9 @@ router.post("/api/main/date", isLoggedIn, async (req, res) => {
     isProtection,
     isControl,
     dateMood,
-    //★ 프런트 처리 미완 ★
-    dateCondition,
+    dateCondition1,
+    dateCondition2,
+    dateCondition3,
     dateMemo,
   } = req.body;
   try {
@@ -36,10 +37,9 @@ router.post("/api/main/date", isLoggedIn, async (req, res) => {
           isProtection: isProtection,
           isControl: isControl,
           dateMood: dateMood,
-          dateCondition1: dateCondition,
-          //★ 프런트 처리 미완 ★
-          dateCondition2: 0,
-          dateCondition3: 0,
+          dateCondition1: dateCondition1,
+          dateCondition2: dateCondition2,
+          dateCondition3: dateCondition3,
           dateMemo: dateMemo,
           userId: req.user.id,
         },
@@ -55,10 +55,9 @@ router.post("/api/main/date", isLoggedIn, async (req, res) => {
         isProtection: isProtection,
         isControl: isControl,
         dateMood: dateMood,
-        dateCondition1: dateCondition,
-        //★ 프런트 처리 미완 ★
-        dateCondition2: 0,
-        dateCondition3: 0,
+        dateCondition1: dateCondition1,
+        dateCondition2: dateCondition2,
+        dateCondition3: dateCondition3,
         dateMemo: dateMemo,
         userId: req.user.id,
       });
