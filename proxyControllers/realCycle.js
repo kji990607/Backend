@@ -1,5 +1,5 @@
 //실제 생리 주기 관련 정보 처리
-const { User } = require("../models");
+const { User, Cycle } = require("../models");
 
 const json = require("./responseController");
 
