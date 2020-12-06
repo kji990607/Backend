@@ -68,35 +68,21 @@ const askRealCycle = async (req, res, next) => {
         //정보가 없는 경우
         cycleStart = -2;
         cycleEnd = -2;
-        resObj.version = req.body.version;
-        resObj.output.cycleStart = cycleStart;
-        resObj.output.cycleEnd = cycleEnd;
-        console.log(resObj);
-        res.json(resObj);
-        res.end();
-        return;
       } else if (recentCycle[0].bleedEnd === null) {
         //시작만 있고 끝은 없는 주기인 경우
         cycleStart = recentCycle[0].bleedStart;
         cycleEnd = -2;
-        resObj.version = req.body.version;
-        resObj.output.cycleStart = cycleStart;
-        resObj.output.cycleEnd = cycleEnd;
-        console.log(resObj);
-        res.json(resObj);
-        res.end();
-        return;
       } else if (recentCycle) {
         cycleStart = recentCycle[0].bleedStart;
         cycleEnd = recentCycle[0].bleedEnd;
-        resObj.version = req.body.version;
-        resObj.output.cycleStart = cycleStart;
-        resObj.output.cycleEnd = cycleEnd;
-        console.log(resObj);
-        res.json(resObj);
-        res.end();
-        return;
       }
+      resObj.version = req.body.version;
+      resObj.output.cycleStart = cycleStart;
+      resObj.output.cycleEnd = cycleEnd;
+      console.log(resObj);
+      res.json(resObj);
+      res.end();
+      return;
     }
   } catch (error) {
     console.error(error);
