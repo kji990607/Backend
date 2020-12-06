@@ -20,7 +20,7 @@ const askMeanCycle = async (req, res, next) => {
     } else if (exUser) {
       meanCycle = exUser.meanCycle;
     }
-    //처리 후 responseController형식에 맞춰줘야 함. nugu 홈페이지 responseSample 형식으로x
+    //처리 후 responseController형식에 맞춰줘야 함. nugu 홈페이지 responseSample 형식으로
     const resObj = json.resSample();
     resObj.version = req.body.version;
     resObj.output.meanCycle = meanCycle;
