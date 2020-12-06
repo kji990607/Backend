@@ -10,8 +10,8 @@ COOKIE_SECRET=passengers
 
 2 터미널에 `sequelize db:create` 명령어로 DB 생성
 
-### ★ 11/11 기준 DB 구조
-<img width="501" alt="DB" src="https://user-images.githubusercontent.com/62373386/98750231-c1812b80-2400-11eb-8f6a-604114582d0d.PNG">
+### ★ 12/03 기준 DB 구조
+![DB schema](https://user-images.githubusercontent.com/62373386/101015079-2e27ba00-35aa-11eb-8e01-7b900d0019aa.png)
 
 ### ★ time
 [참고 링크](https://flymogi.tistory.com/entry/nodejs-%ED%95%9C%EA%B5%AD-%EC%8B%9C%EA%B0%84-%EA%B5%AC%ED%95%98%EA%B8%B0)

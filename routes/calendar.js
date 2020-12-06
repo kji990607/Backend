@@ -17,8 +17,9 @@ router.post("/api/main/date", isLoggedIn, async (req, res) => {
     isProtection,
     isControl,
     dateMood,
-    //★ 프런트 처리 미완 ★
-    dateCondition,
+    dateCondition1,
+    dateCondition2,
+    dateCondition3,
     dateMemo,
   } = req.body;
   try {
@@ -36,10 +37,9 @@ router.post("/api/main/date", isLoggedIn, async (req, res) => {
           isProtection: isProtection,
           isControl: isControl,
           dateMood: dateMood,
-          dateCondition1: dateCondition,
-          //★ 프런트 처리 미완 ★
-          dateCondition2: 0,
-          dateCondition3: 0,
+          dateCondition1: dateCondition1,
+          dateCondition2: dateCondition2,
+          dateCondition3: dateCondition3,
           dateMemo: dateMemo,
           userId: req.user.id,
         },
@@ -55,10 +55,9 @@ router.post("/api/main/date", isLoggedIn, async (req, res) => {
         isProtection: isProtection,
         isControl: isControl,
         dateMood: dateMood,
-        dateCondition1: dateCondition,
-        //★ 프런트 처리 미완 ★
-        dateCondition2: 0,
-        dateCondition3: 0,
+        dateCondition1: dateCondition1,
+        dateCondition2: dateCondition2,
+        dateCondition3: dateCondition3,
         dateMemo: dateMemo,
         userId: req.user.id,
       });
@@ -109,7 +108,7 @@ router.post("/api/main/date", isLoggedIn, async (req, res) => {
           where: { id: req.user.id },
         });
         await Cycle.create({
-          //★ meanPeriod를 입력 안 한 사용자일때? ★
+          //meanPeriod는 필수값
           bleedStart: moment(cycleEnd, "YYYY-MM-DD")
             .subtract(userInfo.meanPeriod, "d")
             .format("YYYY-MM-DD"),
@@ -121,6 +120,64 @@ router.post("/api/main/date", isLoggedIn, async (req, res) => {
         return res.status(200).json({ completed: true });
       }
     }
+  } catch (error) {
+    console.error(error);
+    return next(error);
+  }
+});
+
+//?calendar=2020-11-30 형식으로 년, 월 들어오면 주기 정보 보내줌
+router.get("/api/main/", isLoggedIn, async (req, res) => {
+  const calendar_input = req.query.calendar;
+  const calendar_split = calendar_input.split("-");
+  const calendar_year = calendar_split[0];
+  const calendar_month = calendar_split[1];
+  const find_start = moment(
+    calendar_year + "-" + calendar_month + "-01"
+  ).format("YYYY-MM-DD");
+  const find_end = req.query.calendar;
+  try {
+    const bleedStart = await Cycle.findAll({
+      attributes: ["bleedStart"],
+      where: {
+        [Op.and]: [
+          { bleedStart: { [Op.gte]: find_start } },
+          { bleedStart: { [Op.lte]: find_end } },
+        ],
+      },
+      raw: true,
+    });
+    const bleedEnd = await Cycle.findAll({
+      attributes: ["bleedEnd"],
+      where: {
+        [Op.and]: [
+          { bleedEnd: { [Op.gte]: find_start } },
+          { bleedEnd: { [Op.lte]: find_end } },
+        ],
+      },
+      raw: true,
+    });
+    const eggStart = await Cycle.findAll({
+      attributes: ["EggStart"],
+      where: {
+        [Op.and]: [
+          { EggStart: { [Op.gte]: find_start } },
+          { EggStart: { [Op.lte]: find_end } },
+        ],
+      },
+      raw: true,
+    });
+    const eggEnd = await Cycle.findAll({
+      attributes: ["EggEnd"],
+      where: {
+        [Op.and]: [
+          { EggEnd: { [Op.gte]: find_start } },
+          { EggEnd: { [Op.lte]: find_end } },
+        ],
+      },
+      raw: true,
+    });
+    return [bleedStart, bleedEnd, eggStart, eggEnd];
   } catch (error) {
     console.error(error);
     return next(error);

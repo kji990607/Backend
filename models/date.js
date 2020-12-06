@@ -38,6 +38,9 @@ module.exports = (sequelize, DataTypes) => {
       dateMemo: {
         type: DataTypes.TEXT,
       },
+      pillReco: {
+        type: DataTypes.INTEGER(20),
+      },
     },
     {
       timestamps: false,

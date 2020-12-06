@@ -19,6 +19,7 @@ router.post("/api/auth/register", isNotLoggedIn, async (req, res) => {
     meanCycle,
     meanPeriod,
     userAlcohol,
+    userStomach,
   } = req.body;
   try {
     //exUser 존재 시
@@ -39,6 +40,7 @@ router.post("/api/auth/register", isNotLoggedIn, async (req, res) => {
       meanCycle: meanCycle,
       meanPeriod: meanPeriod,
       userAlcohol: userAlcohol,
+      userStomach: userStomach,
     });
     const loginUser = await User.findOne({
       attributes: ["id"],
@@ -76,7 +78,7 @@ router.post("/api/auth/login", isNotLoggedIn, async (req, res, next) => {
         console.error(loginError);
         return next(loginError);
       }
-      return res.json({id: user.id, name: user.userName});
+      return res.json({ id: user.id, name: user.userName });
     });
   })(req, res, next);
 });
