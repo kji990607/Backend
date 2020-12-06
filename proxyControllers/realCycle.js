@@ -46,8 +46,8 @@ const askRealCycle = async (req, res, next) => {
     });
     if (!exUser) {
       //아이디 틀린 경우
-      cycleStart = -1;
-      cycleEnd = -1;
+      cycleStart = "아이디";
+      cycleEnd = "아이디";
       resObj.version = req.body.version;
       resObj.output.cycleStart = cycleStart;
       resObj.output.cycleEnd = cycleEnd;
@@ -66,12 +66,12 @@ const askRealCycle = async (req, res, next) => {
       });
       if (recentCycle[0] === undefined) {
         //정보가 없는 경우
-        cycleStart = -2;
-        cycleEnd = -2;
+        cycleStart = "널";
+        cycleEnd = "널";
       } else if (recentCycle[0].bleedEnd === null) {
         //시작만 있고 끝은 없는 주기인 경우
         cycleStart = recentCycle[0].bleedStart;
-        cycleEnd = -2;
+        cycleEnd = "널";
       } else if (recentCycle) {
         cycleStart = recentCycle[0].bleedStart;
         cycleEnd = recentCycle[0].bleedEnd;
