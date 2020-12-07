@@ -7,7 +7,7 @@ const json = require("./responseController");
 const resObj = json.resSample();
 let pillPredict = 0;
 
-const askPillPredict = async (req, res, next) => {ac
+const askPillPredict = async (req, res, next) => {
   try {
     //사용자 존재하는지 먼저 조회
     const exUser = await User.findOne({
