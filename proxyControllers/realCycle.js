@@ -18,10 +18,10 @@ const askMeanCycle = async (req, res, next) => {
     });
     if (!exUser) {
       //아이디가 틀린 경우
-      meanCycle = "-1";
+      meanCycle = "아이디";
     } else if (exUser.meanCycle === null) {
       //정보가 없는 경우
-      meanCycle = "-2";
+      meanCycle = "널";
     } else if (exUser) {
       meanCycle = exUser.meanCycle;
     }
