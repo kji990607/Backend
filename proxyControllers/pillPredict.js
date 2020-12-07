@@ -33,7 +33,7 @@ const askPillPredict = async (req, res, next) => {
         raw: true,
       });
       //최근 날짜 정보 존재하지 않는 경우
-      if (dateInfo[0].date === undefined) {
+      if (dateInfo[0] === undefined) {
         pillPredict = "널";
       } else {
         //아이디도 존재, 최근 날짜 정보도 존재하는 경우
