@@ -1,6 +1,7 @@
 //실제 생리 주기 관련 정보 처리
 const { User, Cycle } = require("../models");
-const Op = Sequelize.Op;
+//const Sequelize = require("sequelize");
+//const Op = Sequelize.Op;
 
 const json = require("./responseController");
 
