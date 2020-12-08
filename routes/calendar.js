@@ -31,21 +31,21 @@ router.post("/api/main/date", isLoggedIn, async (req, res) => {
     //이미 존재하던 날짜 정보면 update
     if (exDate) {
       await Date.update(
-          {
-            date: date,
-            isSex: isSex,
-            isProtection: isProtection,
-            isControl: isControl,
-            dateMood: dateMood,
-            dateCondition1: dateCondition1,
-            dateCondition2: dateCondition2,
-            dateCondition3: dateCondition3,
-            dateMemo: dateMemo,
-            userId: req.user.id,
-          },
-          {
-            where: { date: date, userId: req.user.id },
-          }
+        {
+          date: date,
+          isSex: isSex,
+          isProtection: isProtection,
+          isControl: isControl,
+          dateMood: dateMood,
+          dateCondition1: dateCondition1,
+          dateCondition2: dateCondition2,
+          dateCondition3: dateCondition3,
+          dateMemo: dateMemo,
+          userId: req.user.id,
+        },
+        {
+          where: { date: date, userId: req.user.id },
+        }
       );
     } else {
       //새로운 날짜 정보면 create
@@ -79,16 +79,16 @@ router.post("/api/main/date", isLoggedIn, async (req, res) => {
       } else if (cycleEnd) {
         //사용자가 cycleEnd를 설정: cycles 테이블 bleedEnd 업데이트
         await Cycle.update(
-            {
-              bleedEnd: cycleEnd,
+          {
+            bleedEnd: cycleEnd,
+          },
+          {
+            where: {
+              bleedStart: { [Op.ne]: null },
+              bleedEnd: null,
+              userId: req.user.id,
             },
-            {
-              where: {
-                bleedStart: { [Op.ne]: null },
-                bleedEnd: null,
-                userId: req.user.id,
-              },
-            }
+          }
         );
         return res.status(200).json({ completed: true });
       }
@@ -110,8 +110,8 @@ router.post("/api/main/date", isLoggedIn, async (req, res) => {
         await Cycle.create({
           //meanPeriod는 필수값
           bleedStart: moment(cycleEnd, "YYYY-MM-DD")
-              .subtract(userInfo.meanPeriod, "d")
-              .format("YYYY-MM-DD"),
+            .subtract(userInfo.meanPeriod, "d")
+            .format("YYYY-MM-DD"),
           bleedEnd: cycleEnd,
           userId: req.user.id,
         });
@@ -133,7 +133,7 @@ router.get("/api/main/", isLoggedIn, async (req, res) => {
   const calendar_year = calendar_split[0];
   const calendar_month = calendar_split[1];
   const find_start = moment(
-      calendar_year + "-" + calendar_month + "-01"
+    calendar_year + "-" + calendar_month + "-01"
   ).format("YYYY-MM-DD");
   const find_end = req.query.calendar;
   try {
@@ -143,6 +143,7 @@ router.get("/api/main/", isLoggedIn, async (req, res) => {
         [Op.and]: [
           { bleedStart: { [Op.gte]: find_start } },
           { bleedStart: { [Op.lte]: find_end } },
+          { userId: req.user.id },
         ],
       },
       raw: true,
@@ -153,6 +154,7 @@ router.get("/api/main/", isLoggedIn, async (req, res) => {
         [Op.and]: [
           { bleedEnd: { [Op.gte]: find_start } },
           { bleedEnd: { [Op.lte]: find_end } },
+          { userId: req.user.id },
         ],
       },
       raw: true,
@@ -163,6 +165,7 @@ router.get("/api/main/", isLoggedIn, async (req, res) => {
         [Op.and]: [
           { EggStart: { [Op.gte]: find_start } },
           { EggStart: { [Op.lte]: find_end } },
+          { userId: req.user.id },
         ],
       },
       raw: true,
