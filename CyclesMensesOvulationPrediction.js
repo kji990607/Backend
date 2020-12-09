@@ -194,74 +194,78 @@ async function predictAllValues(userId){
   var cyclelengtharray = Array.from(Array(nbOfCycles), () => new Array(1));
   var menseslengtharray = Array.from(Array(nbOfCycles), () => new Array(1));
   if(nbOfCycles=4){timePortion=3;}
+  if(nbOfCycles>=4)
+  {
+    for(i = 1; i<cycles.length; i++){
+      //we create a date object using the string value of the database
+      var bleedStart = new Date(cycles[i-1]['bleedStart']);
+      var bleedStart2 = new Date(cycles[i]['bleedStart']);
+      //then we calculate the legnthOfCycle
+      var lengthOfCycle = Math.round((bleedStart2.getTime() - bleedStart.getTime())/ (1000 * 3600 * 24));
+      // we then fill the arrays with the values calculated
+      cyclelengtharray[i-1][0]=lengthOfCycle;
+    }
 
-  for(i = 1; i<cycles.length; i++){
-    //we create a date object using the string value of the database
-    var bleedStart = new Date(cycles[i-1]['bleedStart']);
-    var bleedStart2 = new Date(cycles[i]['bleedStart']);
-    //then we calculate the legnthOfCycle
-    var lengthOfCycle = Math.round((bleedStart2.getTime() - bleedStart.getTime())/ (1000 * 3600 * 24));
-    // we then fill the arrays with the values calculated
-    cyclelengtharray[i-1][0]=lengthOfCycle;
+    //we fill the arrays previously created with the values found in the database
+    for(i = 0; i<cycles.length-1; i++){
+      //we create a date object using the string value of the database
+      var bleedStart = new Date(cycles[i]['bleedStart']);
+      var bleedEnd = new Date(cycles[i]['bleedEnd']);
+      //then we calculate the lengthOfPeriods
+      var lengthOfPeriods = Math.round((bleedEnd.getTime() - bleedStart.getTime())/ (1000 * 3600 * 24));
+      // we then fill the array with the values calculated
+      menseslengtharray[i][0]=lengthOfPeriods;
+    }
+
+
+    console.log(menseslengtharray);
+
+    // we use it to predict the value of the next cycleLength
+    var nextCycleLength = await modelTrainingAndPredictingOnDataset(cyclelengtharray, timePortion);
+    cyclelengtharray.push([nextCycleLength]);
+    var nextCycleLength2 = await modelTrainingAndPredictingOnDataset(cyclelengtharray, timePortion);
+
+    // we use it to predict the value of the next cycleLength
+    var nextMensesLength = await modelTrainingAndPredictingOnDataset(menseslengtharray, timePortion);
+    menseslengtharray.push([nextMensesLength]);
+    var nextMensesLength2 = await modelTrainingAndPredictingOnDataset(menseslengtharray, timePortion);
+
+    // here the last task needed is to send those 3 values to the mySQL database
+
+  //we count the previous predictions of this user saved in the database so we dont try to
+  // overwrite existing values
+    const predicts = await Predict.count({where:{ userId: userId,}});
+
+
+    // here we initialize the new predicted dates, they are all copies of the end date of the preivous cycle
+    // to which we add the number of days corresponding to our predictions made by the models
+    var predictedBleedStart = new Date(Number(bleedStart2));
+    var predictedBleedEnd = new Date(Number(bleedStart2));
+    var predictedEggStart = new Date(Number(bleedStart2));
+    var predictedEggEnd = new Date(Number(bleedStart2));
+
+    model = await load(model);
+    const inputTensor = tf.tensor2d([nextCycleLength2],[1,1]);
+    const outputValue = model.predict(inputTensor);
+    const predictedOvulationDay = outputValue.dataSync()[0];
+
+    predictedBleedStart.setDate(predictedBleedStart.getDate()+nextCycleLength);
+    predictedBleedEnd.setDate(predictedBleedEnd.getDate()+(nextCycleLength+nextMensesLength2));
+    predictedEggStart.setDate(predictedEggStart.getDate()+(nextCycleLength+predictedOvulationDay-3));
+    predictedEggEnd.setDate(predictedEggEnd.getDate()+(nextCycleLength+predictedOvulationDay+3));
+
+  //we create a new predict in the database using the predicted dates
+    await Predict.create({
+      id: predicts+1,
+      predictBleedStart: predictedBleedStart.toISOString().substring(0,10),
+      predictBleedEnd: predictedBleedEnd.toISOString().substring(0,10),
+      predictEggStart: predictedEggStart.toISOString().substring(0,10),
+      predictEggEnd: predictedEggEnd.toISOString().substring(0,10),
+      userId: userId,
+    });
   }
 
-  //we fill the arrays previously created with the values found in the database
-  for(i = 0; i<cycles.length-1; i++){
-    //we create a date object using the string value of the database
-    var bleedStart = new Date(cycles[i]['bleedStart']);
-    var bleedEnd = new Date(cycles[i]['bleedEnd']);
-    //then we calculate the lengthOfPeriods
-    var lengthOfPeriods = Math.round((bleedEnd.getTime() - bleedStart.getTime())/ (1000 * 3600 * 24));
-    // we then fill the array with the values calculated
-    menseslengtharray[i][0]=lengthOfPeriods;
-  }
 
-
-  console.log(menseslengtharray);
-
-  // we use it to predict the value of the next cycleLength
-  var nextCycleLength = await modelTrainingAndPredictingOnDataset(cyclelengtharray, timePortion);
-  cyclelengtharray.push([nextCycleLength]);
-  var nextCycleLength2 = await modelTrainingAndPredictingOnDataset(cyclelengtharray, timePortion);
-
-  // we use it to predict the value of the next cycleLength
-  var nextMensesLength = await modelTrainingAndPredictingOnDataset(menseslengtharray, timePortion);
-  menseslengtharray.push([nextMensesLength]);
-  var nextMensesLength2 = await modelTrainingAndPredictingOnDataset(menseslengtharray, timePortion);
-
-  // here the last task needed is to send those 3 values to the mySQL database
-
-//we count the previous predictions of this user saved in the database so we dont try to
-// overwrite existing values
-  const predicts = await Predict.count({where:{ userId: userId,}});
-
-
-  // here we initialize the new predicted dates, they are all copies of the end date of the preivous cycle
-  // to which we add the number of days corresponding to our predictions made by the models
-  var predictedBleedStart = new Date(Number(bleedStart2));
-  var predictedBleedEnd = new Date(Number(bleedStart2));
-  var predictedEggStart = new Date(Number(bleedStart2));
-  var predictedEggEnd = new Date(Number(bleedStart2));
-
-  model = await load(model);
-  const inputTensor = tf.tensor2d([nextCycleLength2],[1,1]);
-  const outputValue = model.predict(inputTensor);
-  const predictedOvulationDay = outputValue.dataSync()[0];
-
-  predictedBleedStart.setDate(predictedBleedStart.getDate()+nextCycleLength);
-  predictedBleedEnd.setDate(predictedBleedEnd.getDate()+(nextCycleLength+nextMensesLength2));
-  predictedEggStart.setDate(predictedEggStart.getDate()+(nextCycleLength+predictedOvulationDay-3));
-  predictedEggEnd.setDate(predictedEggEnd.getDate()+(nextCycleLength+predictedOvulationDay+3));
-
-//we create a new predict in the database using the predicted dates
-  await Predict.create({
-    id: predicts+1,
-    predictBleedStart: predictedBleedStart.toISOString().substring(0,10),
-    predictBleedEnd: predictedBleedEnd.toISOString().substring(0,10),
-    predictEggStart: predictedEggStart.toISOString().substring(0,10),
-    predictEggEnd: predictedEggEnd.toISOString().substring(0,10),
-    userId: userId,
-  });
 
 }
 
