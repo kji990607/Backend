@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { askMeanCycle, askRealCycle, answerRealStart} = require("../proxyControllers/realCycle");
+const { askMeanCycle, askRealCycle, answerRealStart, answerRealEnd} = require("../proxyControllers/realCycle");
 const { askPillPredict } = require("../proxyControllers/pillPredict");
 const { askCyclePredict } = require("../proxyControllers/cyclePredict");
 
@@ -10,7 +10,7 @@ const { askCyclePredict } = require("../proxyControllers/cyclePredict");
 router.post("/answer.meanCycle", askMeanCycle);
 router.post("/answer.cycle", askRealCycle);
 router.post("/output.cycleStart", answerRealStart);
-// router.post("/output.cycleEnd", answerRealEnd);
+router.post("/output.cycleEnd", answerRealEnd);
 
 router.post("/answer.pill", askPillPredict);
 
