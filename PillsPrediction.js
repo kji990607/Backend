@@ -165,9 +165,18 @@ function getClassName(classIndex){
     for(var i=0; i<featuresarray.length;i++){
       featuresarray[i]=0;
     }
-    featuresarray[symptoms[nbDates-1]['dateCondition1']]=1;
-    featuresarray[symptoms[nbDates-1]['dateCondition2']]=1;
-    featuresarray[symptoms[nbDates-1]['dateCondition3']]=1;
+    if(symptoms[nbDates-1]['dateCondition1'])
+    {
+      featuresarray[symptoms[nbDates-1]['dateCondition1']]=1;
+    }
+    if(symptoms[nbDates-1]['dateCondition2'])
+    {
+      featuresarray[symptoms[nbDates-1]['dateCondition1']]=1;
+    }
+    if(symptoms[nbDates-1]['dateCondition3'])
+    {
+      featuresarray[symptoms[nbDates-1]['dateCondition1']]=1;
+    }
 
     model = await load(model);
     var pill = await predict(featuresarray);
@@ -181,7 +190,7 @@ function getClassName(classIndex){
 
 }
 //modelTrainingOnDataset();
-//modelPredictingOnUserDataset(1);
+modelPredictingOnUserDataset(1);
 
 module.exports = {modelPredictingOnUserDataset};
 //use modelPredictingOnUserDataset(userID) to make a prediction;

@@ -33,29 +33,30 @@ const askPillPredict = async (req, res, next) => {
         raw: true,
       });
       //최근 날짜 정보 존재하지 않는 경우
-      if (dateInfo[0].date === undefined) {
+      if (dateInfo[0] === undefined) {
         pillPredict = "널";
       } else {
         //아이디도 존재, 최근 날짜 정보도 존재하는 경우
         //머신러닝으로 pillReco 입력
         await pillsPrediction.modelPredictingOnUserDataset(
-          req.body.action.parameters.user_ID.value
+            req.body.action.parameters.user_ID.value
         );
         //pillReco 조회
-        const pillPredict = await Date.findAll({
+        const pillFind = await Date.findAll({
           limit: 1,
           attributes: ["pillReco"],
           where: { userId: req.body.action.parameters.user_ID.value },
           order: [["date", "DESC"]],
           raw: true,
         });
-        resObj.version = req.body.version;
-        resObj.output.pillPredict = pillPredict[0].pillReco;
-        console.log(resObj);
-        res.json(resObj);
-        res.end();
-        return;
+        pillPredict = pillFind[0].pillReco;
       }
+      resObj.version = req.body.version;
+      resObj.output.pillPredict = pillPredict;
+      console.log(resObj);
+      res.json(resObj);
+      res.end();
+      return;
     }
   } catch (error) {
     console.error(error);

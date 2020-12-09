@@ -1,29 +1,31 @@
 {
   "files": {
     "main.css": "/static/css/main.f86f73d6.chunk.css",
-    "main.js": "/static/js/main.73cad554.chunk.js",
-    "main.js.map": "/static/js/main.73cad554.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.ae3ff174.js",
-    "runtime-main.js.map": "/static/js/runtime-main.ae3ff174.js.map",
-    "static/js/2.41564a88.chunk.js": "/static/js/2.41564a88.chunk.js",
-    "static/js/2.41564a88.chunk.js.map": "/static/js/2.41564a88.chunk.js.map",
-    "static/js/3.39da4b78.chunk.js": "/static/js/3.39da4b78.chunk.js",
-    "static/js/3.39da4b78.chunk.js.map": "/static/js/3.39da4b78.chunk.js.map",
+    "main.js": "/static/js/main.4c81f50c.chunk.js",
+    "main.js.map": "/static/js/main.4c81f50c.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.e8081125.js",
+    "runtime-main.js.map": "/static/js/runtime-main.e8081125.js.map",
+    "static/css/2.06382735.chunk.css": "/static/css/2.06382735.chunk.css",
+    "static/js/2.0dd9fe03.chunk.js": "/static/js/2.0dd9fe03.chunk.js",
+    "static/js/2.0dd9fe03.chunk.js.map": "/static/js/2.0dd9fe03.chunk.js.map",
+    "static/js/3.9b0ca57b.chunk.js": "/static/js/3.9b0ca57b.chunk.js",
+    "static/js/3.9b0ca57b.chunk.js.map": "/static/js/3.9b0ca57b.chunk.js.map",
     "index.html": "/index.html",
+    "static/css/2.06382735.chunk.css.map": "/static/css/2.06382735.chunk.css.map",
     "static/css/main.f86f73d6.chunk.css.map": "/static/css/main.f86f73d6.chunk.css.map",
-    "static/js/2.41564a88.chunk.js.LICENSE.txt": "/static/js/2.41564a88.chunk.js.LICENSE.txt",
+    "static/js/2.0dd9fe03.chunk.js.LICENSE.txt": "/static/js/2.0dd9fe03.chunk.js.LICENSE.txt",
     "static/media/circle_svg.5bdfc8d2.svg": "/static/media/circle_svg.5bdfc8d2.svg",
     "static/media/entry_page.71dbd1a1.svg": "/static/media/entry_page.71dbd1a1.svg",
-    "static/media/home_navy_svg.38cab4ed.svg": "/static/media/home_navy_svg.38cab4ed.svg",
     "static/media/pill_navy_svg.2634ce78.svg": "/static/media/pill_navy_svg.2634ce78.svg",
     "static/media/schedule_navy_svg.9b720279.svg": "/static/media/schedule_navy_svg.9b720279.svg",
     "static/media/shopping_navy_svg.4f371b1d.svg": "/static/media/shopping_navy_svg.4f371b1d.svg",
     "static/media/woman_gray_svg.59e5198e.svg": "/static/media/woman_gray_svg.59e5198e.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.ae3ff174.js",
-    "static/js/2.41564a88.chunk.js",
+    "static/js/runtime-main.e8081125.js",
+    "static/css/2.06382735.chunk.css",
+    "static/js/2.0dd9fe03.chunk.js",
     "static/css/main.f86f73d6.chunk.css",
-    "static/js/main.73cad554.chunk.js"
+    "static/js/main.4c81f50c.chunk.js"
   ]
 }
