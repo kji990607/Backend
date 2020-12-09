@@ -113,7 +113,7 @@ const answerRealStart = async (req, res, next) => {
       res.end();
       return;
     }else{
-      if (req.body.action.parameters.DATE.value === TODAY) {
+      if (req.body.action.parameters.DATE.value === "TODAY") {
         const exCycle = await Cycle.findAll({
           limit: 1,
           where: {
@@ -134,7 +134,7 @@ const answerRealStart = async (req, res, next) => {
           }
         }
 
-      } else if (req.body.action.parameters.DATE.value === YESTERDAY) {
+      } else if (req.body.action.parameters.DATE.value === "YESTERDAY") {
         const exCycle = await Cycle.findAll({
           limit: 1,
           where: {
@@ -155,7 +155,7 @@ const answerRealStart = async (req, res, next) => {
           }
         }
 
-      } else if (req.body.action.parameters.DATE.value === B_YESTERDAY) {
+      } else if (req.body.action.parameters.DATE.value === "B_YESTERDAY") {
         const exCycle = await Cycle.findAll({
           limit: 1,
           where: {
@@ -211,7 +211,7 @@ const answerRealEnd = async (req, res, next) => {
       res.end();
       return;
     }else{
-      if (req.body.action.parameters.DATE.value === TODAY) {
+      if (req.body.action.parameters.DATE.value === "TODAY") {
         const exCycle = await Cycle.findAll({
           limit: 1,
           where: {
@@ -232,7 +232,7 @@ const answerRealEnd = async (req, res, next) => {
           }
         }
 
-      } else if (req.body.action.parameters.DATE.value === YESTERDAY) {
+      } else if (req.body.action.parameters.DATE.value === "YESTERDAY") {
         const exCycle = await Cycle.findAll({
           limit: 1,
           where: {
