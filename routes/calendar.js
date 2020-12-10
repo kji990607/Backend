@@ -127,7 +127,7 @@ router.post("/api/main/date", isLoggedIn, async (req, res) => {
 });
 
 //?calendar=2020-11-30 형식으로 년, 월 들어오면 주기 정보 보내줌
-router.get("/api/main/", isLoggedIn, async (req, res) => {
+router.get("/api/main/calendar/", isLoggedIn, async (req, res) => {
   const calendar_input = req.query.calendar;
   const calendar_split = calendar_input.split("-");
   const calendar_year = calendar_split[0];
