@@ -85,7 +85,7 @@ async function modelTraining(points){
 
     return model.fit(trainingFeature,trainingLabel, {
       batchSize: 32,
-      epochs: 200,
+      epochs: 350,
 
     });
   }
@@ -167,30 +167,26 @@ function getClassName(classIndex){
     }
     if(symptoms[nbDates-1]['dateCondition1'])
     {
-      featuresarray[symptoms[nbDates-1]['dateCondition1']]=1;
+      featuresarray[symptoms[nbDates-1]['dateCondition1']-1]=1;
     }
     if(symptoms[nbDates-1]['dateCondition2'])
     {
-      featuresarray[symptoms[nbDates-1]['dateCondition1']]=1;
+      featuresarray[symptoms[nbDates-1]['dateCondition1']-1]=1;
     }
     if(symptoms[nbDates-1]['dateCondition3'])
     {
-      featuresarray[symptoms[nbDates-1]['dateCondition1']]=1;
+      featuresarray[symptoms[nbDates-1]['dateCondition1']-1]=1;
     }
 
     model = await load(model);
     var pill = await predict(featuresarray);
-    await Date.update({ pillReco: pill}, {
-  where: {
-    id: nbDates,
-    userId: userId,
-  }
-});
+
+    return pill;
 
 
 }
-//modelTrainingOnDataset();
-modelPredictingOnUserDataset(1);
+////modelTrainingOnDataset();
+//modelPredictingOnUserDataset(1);
 
 module.exports = {modelPredictingOnUserDataset};
 //use modelPredictingOnUserDataset(userID) to make a prediction;
